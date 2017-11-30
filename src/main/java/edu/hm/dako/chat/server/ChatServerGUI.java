@@ -137,7 +137,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			}
 		});
 
-		pane.setStyle("-fx-background-color: cornsilk");
+		pane.setStyle("-fx-background-color: #43647c");
 		pane.setPadding(new Insets(10, 10, 10, 10));
 
 		pane.getChildren().add(createSeperator("Eingabe", 265));

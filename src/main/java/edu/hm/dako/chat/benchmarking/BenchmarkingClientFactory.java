@@ -23,7 +23,6 @@ public final class BenchmarkingClientFactory {
 			SharedClientStatistics sharedData,
 			BenchmarkingClientUserInterface benchmarkingGui) {
 		try {
-
 			switch (param.getImplementationType()) {
 
 			case TCPSimpleImplementation:

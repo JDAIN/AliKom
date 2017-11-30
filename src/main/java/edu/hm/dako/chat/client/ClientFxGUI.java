@@ -79,7 +79,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 		lc.setAppController(this);
 		primaryStage.setTitle("Anmelden");
 		primaryStage.setScene(new Scene(root, 280, 320));
-		root.setStyle("-fx-background-color: cornsilk");
+		root.setStyle("-fx-background-color: #43647c");
 		stage = primaryStage;
 		primaryStage.show();
 	}
@@ -99,7 +99,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 					public void run() {
 						stage.setTitle("Angemeldet");
 						stage.setScene(new Scene(root, 600, 400));
-						root.setStyle("-fx-background-color: cornsilk");
+						root.setStyle("-fx-background-color: #43647c");
 					}
 				});
 			} catch (Exception e) {
