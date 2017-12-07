@@ -99,7 +99,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 					public void run() {
 						stage.setTitle("Angemeldet");
 						stage.setScene(new Scene(root, 600, 400));
-						root.setStyle("-fx-background-color: cornsilk");
+						root.setStyle("-fx-background-color: #3a4d66");
 					}
 				});
 			} catch (Exception e) {
