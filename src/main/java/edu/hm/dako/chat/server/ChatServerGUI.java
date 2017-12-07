@@ -100,7 +100,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	// Moegliche Belegungen des Implementierungsfeldes in der GUI
 	ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
-			SystemConstants.IMPL_TCP_SIMPLE);
+			SystemConstants.IMPL_TCP_SIMPLE, SystemConstants.IMPL_TCP_ADVANCED); //advanced geaddet 
 
 	/**
 	 * Konstruktion der ServerGUI
@@ -137,7 +137,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			}
 		});
 
-		pane.setStyle("-fx-background-color: #43647c");
+		pane.setStyle("-fx-background-color: #3a4d66");
 		pane.setPadding(new Insets(10, 10, 10, 10));
 
 		pane.getChildren().add(createSeperator("Eingabe", 265));

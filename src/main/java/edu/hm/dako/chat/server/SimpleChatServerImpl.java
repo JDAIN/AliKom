@@ -24,7 +24,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 	private static Log log = LogFactory.getLog(SimpleChatServerImpl.class);
 
 	// Threadpool fuer Worker-Threads
-	private final ExecutorService executorService;
+	private final ExecutorService executorService; //was ist das
 
 	// Socket fuer den Listener, der alle Verbindungsaufbauwuensche der Clients
 	// entgegennimmt
