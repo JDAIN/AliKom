@@ -117,6 +117,7 @@ public class LogInGuiController implements Initializable {
 
 		appController.createCommunicator((String) comboServerType.getValue(), serverPort,
 				txtServername.getText());
+		System.out.println("create communicator "   + comboServerType.getValue());
 		try {
 			appController.getCommunicator().login(userName);
 		} catch (Exception e2) {
