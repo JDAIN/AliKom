@@ -8,6 +8,13 @@ import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.connection.Connection;
 
+/**
+ * Thread wartet auf ankommende Nachrichten vom Server und bearbeitet diese.
+ * Nach der Bearbeitung einer Nachricht bestätigt er diese.
+ * 
+ * @author Jannis Ditterich
+ *
+ */
 public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerThread {
 
 	private static Log log = LogFactory.getLog(AdvancedMessageListenerThreadImpl.class);
@@ -16,30 +23,57 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 			SharedClientData sharedData) {
 		super(userInterface, con, sharedData);
 	}
-	
-	
-	
-	
-	
-	
 
-	@Override
+	@Override // unverändert aus simplechat
 	protected void chatMessageResponseAction(ChatPDU receivedPdu) {
-		// TODO Auto-generated method stub
 
+		log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName() + ": "
+				+ receivedPdu.getSequenceNumber() + ", Messagecounter: " + sharedClientData.messageCounter.get());
+
+		log.debug(Thread.currentThread().getName()
+				+ ", Benoetigte Serverzeit gleich nach Empfang der Response-Nachricht: " + receivedPdu.getServerTime()
+				+ " ns = " + receivedPdu.getServerTime() / 1000000 + " ms");
+
+		if (receivedPdu.getSequenceNumber() == sharedClientData.messageCounter.get()) {
+
+			// Zuletzt gemessene Serverzeit fuer das Benchmarking
+			// merken
+			userInterface.setLastServerTime(receivedPdu.getServerTime());
+
+			// Naechste Chat-Nachricht darf eingegeben werden
+			userInterface.setLock(false);
+
+			log.debug("Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
+
+		} else {
+			log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName() + " passt nicht: "
+					+ receivedPdu.getSequenceNumber() + "/" + sharedClientData.messageCounter.get());
+		}
 	}
 
-	@Override
+	@Override // unverändert aus Simple
 	protected void chatMessageEventAction(ChatPDU receivedPdu) {
-		// TODO Auto-generated method stub
 
+		log.debug("Chat-Message-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
+
+		// Eventzaehler fuer Testzwecke erhoehen
+		sharedClientData.eventCounter.getAndIncrement();
+		int events = SharedClientData.messageEvents.incrementAndGet();
+
+		log.debug("MessageEventCounter: " + events);
+
+		// Empfangene Chat-Nachricht an User Interface zur
+		// Darstellung uebergeben
+		userInterface.setMessageLine(receivedPdu.getEventUserName(), (String) receivedPdu.getMessage());
 	}
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * 
+	 * @param receivedPdu
+	 */
+	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
+		log.debug("Chat-Confirm-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
+	}
 
 	@Override // unverändert aus Simple
 	protected void loginResponseAction(ChatPDU receivedPdu) {
@@ -69,7 +103,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		}
 	}
 
-	@Override
+	@Override // unverändert aus simple
 	protected void loginEventAction(ChatPDU receivedPdu) {
 		// Eventzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();
@@ -83,17 +117,8 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 			ExceptionHandler.logException(e);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	@Override
+	@Override // unverändert aus simple
 	protected void logoutEventAction(ChatPDU receivedPdu) {
 		// Eventzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();

@@ -1,0 +1,5 @@
+1. farbe angepasst 
+2. Klassen erstellt für advanced client +server
+3. GUI anpassungen dummy, fkt noch nicht richtig //TODO anpassen
+4. In ChatPDU eine ChatMessageConfirmPDU erstellt, gleich wie ChatMessagEvent nur sequenz nummer wurde entfernt
+5. In Advanced, Methoden aus Simple kopiert und chatMessageConfirmAction erstellt
