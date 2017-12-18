@@ -61,18 +61,33 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		int events = SharedClientData.messageEvents.incrementAndGet();
 
 		log.debug("MessageEventCounter: " + events);
-
+		
 		// Empfangene Chat-Nachricht an User Interface zur
 		// Darstellung uebergeben
 		userInterface.setMessageLine(receivedPdu.getEventUserName(), (String) receivedPdu.getMessage());
+
+		chatMessageConfirmAction(receivedPdu); //aufruf nach event funktioniert noch nicht. 
 	}
 
 	/**
 	 * 
 	 * @param receivedPdu
 	 */
-	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
-		log.debug("Chat-Confirm-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
+	protected void chatMessageConfirmAction(ChatPDU receivedPdu) { // TODO:
+																	// DELETE
+																	// zweite
+																	// debug
+																	// ausgabe
+		log.debug("vorstufe Chat-Confirm-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
+		try {
+			connection.send(ChatPDU.createChatMessageConfirmPdu(getName(), receivedPdu));
+			log.debug("Chat-Confirm-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
+			log.debug(" ADCANCED TEST PLS DELETE  getNameString:   " + getName().toString() + "copy of receivedPDU     "
+					+ receivedPdu.toString());
+
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override // unverändert aus Simple
