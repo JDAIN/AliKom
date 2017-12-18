@@ -3,3 +3,4 @@
 3. GUI anpassungen dummy, fkt noch nicht richtig //TODO anpassen
 4. In ChatPDU eine ChatMessageConfirmPDU erstellt, gleich wie ChatMessagEvent nur sequenz nummer wurde entfernt
 5. In Advanced, Methoden aus Simple kopiert und chatMessageConfirmAction erstellt //evt in advanced einfach die simple methoden aufrufen, code sparen
+6.  checkstyle bug noch anpassen, confirm wird in messageevent aufgerufen, run() für advanced noch hinzugefügt mit debug änderungen

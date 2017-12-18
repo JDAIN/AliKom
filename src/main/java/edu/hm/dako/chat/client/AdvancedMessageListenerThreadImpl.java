@@ -51,7 +51,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		}
 	}
 
-	@Override // unverändert aus Simple
+	@Override // unverändert aus Simple +aufruf von confirm
 	protected void chatMessageEventAction(ChatPDU receivedPdu) {
 
 		log.debug("Chat-Message-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
@@ -61,12 +61,12 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		int events = SharedClientData.messageEvents.incrementAndGet();
 
 		log.debug("MessageEventCounter: " + events);
-		
+
 		// Empfangene Chat-Nachricht an User Interface zur
 		// Darstellung uebergeben
 		userInterface.setMessageLine(receivedPdu.getEventUserName(), (String) receivedPdu.getMessage());
 
-		chatMessageConfirmAction(receivedPdu); //aufruf nach event funktioniert noch nicht. 
+		chatMessageConfirmAction(receivedPdu); // aufruf nach event funktioniert noch nicht.
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		}
 	}
 
-	@Override // unverändert aus simple
+	@Override // unverandert aus simple
 	protected void logoutEventAction(ChatPDU receivedPdu) {
 		// Eventzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();
@@ -161,6 +161,154 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
 		finished = true;
 		userInterface.logoutComplete();
+	}
+
+	/**
+	 * Bearbeitung aller vom Server ankommenden Nachrichten
+	 */
+	public void run() {
+
+		ChatPDU receivedPdu = null;
+
+		log.debug("AdvancedMessageListenerThread gestartet");
+
+		while (!finished) {
+
+			try {
+				// Naechste ankommende Nachricht empfangen
+				log.debug("Auf die naechste Nachricht vom Server warten");
+				receivedPdu = receive();
+				log.debug("Nach receive Aufruf, ankommende PDU mit PduType = " + receivedPdu.getPduType());
+			} catch (Exception e) {
+				finished = true;
+			}
+
+			if (receivedPdu != null) {
+
+				switch (sharedClientData.status) {
+
+				case REGISTERING:
+
+					switch (receivedPdu.getPduType()) {
+
+					case LOGIN_RESPONSE:
+						// Login-Bestaetigung vom Server angekommen
+						loginResponseAction(receivedPdu);
+
+						break;
+
+					case LOGIN_EVENT:
+						// Meldung vom Server, dass sich die Liste der
+						// angemeldeten User erweitert hat
+						loginEventAction(receivedPdu);
+
+						break;
+
+					case LOGOUT_EVENT:
+						// Meldung vom Server, dass sich die Liste der
+						// angemeldeten User veraendert hat
+						logoutEventAction(receivedPdu);
+
+						break;
+
+					case CHAT_MESSAGE_EVENT:
+						// Chat-Nachricht vom Server gesendet
+						chatMessageEventAction(receivedPdu);
+						break;
+
+					default:
+						log.debug("Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
+					}
+					break;
+
+				case REGISTERED:
+
+					switch (receivedPdu.getPduType()) {
+
+					case CHAT_MESSAGE_RESPONSE:
+
+						// Die eigene zuletzt gesendete Chat-Nachricht wird vom
+						// Server bestaetigt.
+						chatMessageResponseAction(receivedPdu);
+						break;
+
+					case CHAT_MESSAGE_EVENT:
+						// Chat-Nachricht vom Server gesendet
+						chatMessageEventAction(receivedPdu);
+						break;
+
+					case LOGIN_EVENT:
+						// Meldung vom Server, dass sich die Liste der
+						// angemeldeten User erweitert hat
+						loginEventAction(receivedPdu);
+
+						break;
+
+					case LOGOUT_EVENT:
+						// Meldung vom Server, dass sich die Liste der
+						// angemeldeten User veraendert hat
+						logoutEventAction(receivedPdu);
+
+						break;
+
+					default:
+						log.debug("Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
+					}
+					break;
+
+				case UNREGISTERING:
+
+					switch (receivedPdu.getPduType()) {
+
+					case CHAT_MESSAGE_EVENT:
+						// Chat-Nachricht vom Server gesendet
+						chatMessageEventAction(receivedPdu);
+						break;
+
+					case LOGOUT_RESPONSE:
+						// Bestaetigung des eigenen Logout
+						logoutResponseAction(receivedPdu);
+						break;
+
+					case LOGIN_EVENT:
+						// Meldung vom Server, dass sich die Liste der
+						// angemeldeten User erweitert hat
+						loginEventAction(receivedPdu);
+
+						break;
+
+					case LOGOUT_EVENT:
+						// Meldung vom Server, dass sich die Liste der
+						// angemeldeten User veraendert hat
+						logoutEventAction(receivedPdu);
+
+						break;
+
+					default:
+						log.debug("Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
+						break;
+					}
+					break;
+
+				case UNREGISTERED:
+					log.debug("Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
+
+					break;
+
+				default:
+					log.debug("Unzulaessiger Zustand " + sharedClientData.status);
+				}
+			}
+		}
+
+		// Verbindung noch schliessen
+		try {
+			connection.close();
+		} catch (Exception e) {
+			ExceptionHandler.logException(e);
+		}
+		log.debug("Ordnungsgemaesses Ende des AdvancedMessageListener-Threads fuer User" + sharedClientData.userName
+				+ ", Status: " + sharedClientData.status);
 	}
 
 }
