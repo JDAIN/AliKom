@@ -415,7 +415,11 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				// Logout-Request vom Client empfangen
 				logoutRequestAction(receivedPdu);
 				break;
-
+				
+			case MESSAGE_CONFIRM: //advanced 
+				chatMessageConfirmAction(receivedPdu);
+			break;
+			
 			default:
 				log.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName() + ", PduType: "
 						+ receivedPdu.getPduType());
@@ -425,5 +429,12 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.error("Exception bei der Nachrichtenverarbeitung");
 			ExceptionHandler.logExceptionAndTerminate(e);
 		}
+	}
+
+
+
+	private void chatMessageConfirmAction(ChatPDU receivedPdu) {
+		// TODO Auto-generated method stub
+		
 	}
 }

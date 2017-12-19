@@ -7,3 +7,6 @@
 7. alles aus simple in advanced server kopiert
 8. watchpoint auf tcpadvanced setzen und schauen warum fehler wenn advanced beim server ausgewählt
 9. weitere gui anpassung mit advanced else if imp TCP angepasst muss nicht weiter angepasst werden sieht github für änderungen. fkt noch nicht
+10. gui anpassungen beendet client und server switch jetzt fkt fähig (siehe github)
+11. AdvancedChatWorkerThreadImpl handleincomingmessage, confirm_message geaddet und dummy action methoden
+12.
