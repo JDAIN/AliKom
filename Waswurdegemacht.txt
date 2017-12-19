@@ -3,4 +3,7 @@
 3. GUI anpassungen dummy, fkt noch nicht richtig //TODO anpassen
 4. In ChatPDU eine ChatMessageConfirmPDU erstellt, gleich wie ChatMessagEvent nur sequenz nummer wurde entfernt
 5. In Advanced, Methoden aus Simple kopiert und chatMessageConfirmAction erstellt //evt in advanced einfach die simple methoden aufrufen, code sparen
-6.  checkstyle bug noch anpassen, confirm wird in messageevent aufgerufen, run() für advanced noch hinzugefügt mit debug änderungen
+6. checkstyle bug noch anpassen (google xml geladen, bug  oxygen? Am Pc unter neon testen), confirm wird in messageevent aufgerufen, run() für advanced noch hinzugefügt mit debug änderungen
+7. alles aus simple in advanced server kopiert
+8. watchpoint auf tcpadvanced setzen und schauen warum fehler wenn advanced beim server ausgewählt
+9. weitere gui anpassung mit advanced else if imp TCP angepasst muss nicht weiter angepasst werden sieht github für änderungen. fkt noch nicht
