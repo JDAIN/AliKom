@@ -12,7 +12,8 @@ import edu.hm.dako.chat.connection.ServerSocketInterface;
 import edu.hm.dako.chat.tcp.TcpServerSocket;
 
 /**
- * Uebernimmt die Konfiguration und Erzeugung bestimmter Server-Typen. 
+ * Uebernimmt die Konfiguration und Erzeugung bestimmter Server-Typen.
+ * 
  * @author Peter Mandl
  */
 public final class ServerFactory {
@@ -25,36 +26,41 @@ public final class ServerFactory {
 	 * Erzeugt einen Chat-Server
 	 * 
 	 * @param implType
-	 *          Implementierungytyp des Servers
+	 *            Implementierungytyp des Servers
 	 * @param serverPort
-	 *          Listenport
+	 *            Listenport
 	 * @param sendBufferSize
-	 *          Groesse des Sendepuffers in Byte
+	 *            Groesse des Sendepuffers in Byte
 	 * @param receiveBufferSize
-	 *          Groesse des Empfangspuffers in Byte
+	 *            Groesse des Empfangspuffers in Byte
 	 * @param serverGuiInterface
-	 *          Referenz auf GUI fuer Callback
+	 *            Referenz auf GUI fuer Callback
 	 * @return
 	 * @throws Exception
 	 */
-	public static ChatServerInterface getServer(ImplementationType implType, int serverPort,
-			int sendBufferSize, int receiveBufferSize,
-			ChatServerGuiInterface serverGuiInterface) throws Exception {
-		log.debug("ChatServer (" + implType.toString() + ") wird gestartet, Serverport: "
-				+ serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: "
-				+ receiveBufferSize);
-		System.out.println("ChatServer (" + implType.toString()
-				+ ") wird gestartet, Listen-Port: " + serverPort + ", Sendepuffer: "
-				+ sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
+	public static ChatServerInterface getServer(ImplementationType implType, int serverPort, int sendBufferSize,
+			int receiveBufferSize, ChatServerGuiInterface serverGuiInterface) throws Exception {
+		log.debug("ChatServer (" + implType.toString() + ") wird gestartet, Serverport: " + serverPort
+				+ ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
+		System.out.println("ChatServer (" + implType.toString() + ") wird gestartet, Listen-Port: " + serverPort
+				+ ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
 
 		switch (implType) {
 
 		case TCPSimpleImplementation:
 
 			try {
-				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
-						receiveBufferSize);
+				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize, receiveBufferSize);
 				return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
+						getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
+			} catch (Exception e) {
+				throw new Exception(e);
+			}
+			// geaddet für advanced gui
+		case TCPAdvancedImplementation:
+			try {
+				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize, receiveBufferSize);
+				return new AdvancedChatServerImpl(Executors.newCachedThreadPool(),
 						getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
 			} catch (Exception e) {
 				throw new Exception(e);
@@ -66,8 +72,7 @@ public final class ServerFactory {
 		}
 	}
 
-	private static ServerSocketInterface getDecoratedServerSocket(
-			ServerSocketInterface serverSocket) {
+	private static ServerSocketInterface getDecoratedServerSocket(ServerSocketInterface serverSocket) {
 		return new DecoratingServerSocket(serverSocket);
 	}
 

@@ -8,5 +8,5 @@ package edu.hm.dako.chat.common;
  */
 
 public enum ImplementationType {
-	TCPSimpleImplementation, TCPAdvancedImplemantation
+	TCPSimpleImplementation, TCPAdvancedImplementation
 }

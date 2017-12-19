@@ -446,7 +446,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 		if (implType.equals(SystemConstants.IMPL_TCP_SIMPLE)) {
 			serverImpl = ImplementationType.TCPSimpleImplementation;
 		} else if (implType.equals(SystemConstants.IMPL_TCP_ADVANCED)) {
-			serverImpl = ImplementationType.TCPAdvancedImplemantation; //geaddet für guianpasssung
+			serverImpl = ImplementationType.TCPAdvancedImplementation; //geaddet für guianpasssung
 		}
 
 		try {
