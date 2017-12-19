@@ -13,6 +13,10 @@ import edu.hm.dako.chat.connection.Connection;
 import edu.hm.dako.chat.connection.ConnectionTimeoutException;
 import edu.hm.dako.chat.connection.EndOfFileException;
 
+/**
+ * 
+ * @author Jannis Ditterich
+ */
 public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 	private static Log log = LogFactory.getLog(AdvancedChatWorkerThreadImpl.class);
