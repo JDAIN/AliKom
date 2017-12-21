@@ -409,6 +409,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			case CHAT_MESSAGE_REQUEST:
 				// Chat-Nachricht angekommen, an alle verteilen
 				chatMessageRequestAction(receivedPdu);
+				//log.debug("REQUEST TESTZEILE______________________________"); //wir aufgerufen nach message request nur test TODO DELETE
 				break;
 
 			case LOGOUT_REQUEST:
@@ -435,6 +436,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 	private void chatMessageConfirmAction(ChatPDU receivedPdu) {
 		// TODO Auto-generated method stub
-		
+		log.debug("/n /n ICH HABE EINE CONFIRM NACHRICHT BEKOMMEN VON " + receivedPdu.getEventUserName()); //nur test
 	}
 }
