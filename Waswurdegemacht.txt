@@ -11,3 +11,4 @@
 11. AdvancedChatWorkerThreadImpl handleincomingmessage, confirm_message geaddet und dummy action methoden
 12. bug entdeckt vergessen beim client auf advanced zu wechselnt. Immo noch simpellistner in verwendung....
 13. bug gefixt, jetzt im clientimpl wird der advanced oder simple je nach systemconstant ausgewählt 
+14. clientseitig jetzt komplett funktionfähig +javadoc 
