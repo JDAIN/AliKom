@@ -88,7 +88,7 @@ public abstract class AbstractMessageListenerThread extends Thread {
 	protected abstract void chatMessageEventAction(ChatPDU receivedPdu);
 
 	/**
-	 * Aktion zur Behandlung ankommender Login-Responsesd.
+	 * Aktion zur Behandlung ankommender Login-Responses.
 	 * 
 	 * @param receivedPdu
 	 *          Ankommende PDU
