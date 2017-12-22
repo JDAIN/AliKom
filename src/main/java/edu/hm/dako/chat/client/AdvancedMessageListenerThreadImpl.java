@@ -1,5 +1,7 @@
 package edu.hm.dako.chat.client;
 
+import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -66,7 +68,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		// Darstellung uebergeben
 		userInterface.setMessageLine(receivedPdu.getEventUserName(), (String) receivedPdu.getMessage());
 
-		chatMessageConfirmAction(receivedPdu); // aufruf nach event funktioniert noch nicht.
 	}
 
 	/**
@@ -76,22 +77,23 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	 * @param receivedPdu
 	 *            Ankommende PDU
 	 */
-	protected void chatMessageConfirmAction(ChatPDU receivedPdu) { // TODO:
-																	// DELETE
-																	// zweite
-																	// debug
-																	// ausgabe
+	protected void chatMessageConfirmAction(ChatPDU receivedPdu) throws IOException { // TODO:
+		// DELETE
+		// zweite
+		// debug
+		// ausgabe
 
 		try {
+
+			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getEventUserName(), receivedPdu));
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Chat-Confirm-Event-PDU zur Nachricht von "
 					+ receivedPdu.getEventUserName());
-			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getEventUserName(), receivedPdu));
-
 			log.debug(" ADCANCED TEST PLS DELETE  getNameString:   " + getName().toString() + "copy of receivedPDU     "
 					+ receivedPdu.toString());
 
 		} catch (Exception e) {
-
+			log.debug("Senden der Confim-Nachricht nicht moeglich");
+			throw new IOException();
 		}
 	}
 
@@ -219,6 +221,12 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 					case CHAT_MESSAGE_EVENT:
 						// Chat-Nachricht vom Server gesendet
 						chatMessageEventAction(receivedPdu);
+						// aufruf vom MessageConfirm (advanced)
+						try {
+							chatMessageConfirmAction(receivedPdu);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 						break;
 
 					default:
