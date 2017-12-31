@@ -14,6 +14,8 @@ import edu.hm.dako.chat.connection.ConnectionTimeoutException;
 import edu.hm.dako.chat.connection.EndOfFileException;
 
 /**
+ * Advanced Worker-Thread zur serverseitigen Bedienung einer Session mit einem Client.
+ * Jedem Chat-Client wird serverseitig ein Worker-Thread zugeordnet.
  * 
  * @author Jannis Ditterich
  */
@@ -24,10 +26,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	public AdvancedChatWorkerThreadImpl(Connection con, SharedChatClientList clients, SharedServerCounter counter,
 			ChatServerGuiInterface serverGuiInterface) {
 		super(con, clients, counter, serverGuiInterface);
-	
 	}
-
-
 
 	@Override
 	public void run() {
@@ -409,18 +408,19 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			case CHAT_MESSAGE_REQUEST:
 				// Chat-Nachricht angekommen, an alle verteilen
 				chatMessageRequestAction(receivedPdu);
-				//log.debug("REQUEST TESTZEILE______________________________"); //wir aufgerufen nach message request nur test TODO DELETE
+				// log.debug("REQUEST TESTZEILE______________________________"); //wir
+				// aufgerufen nach message request nur test TODO DELETE
 				break;
 
 			case LOGOUT_REQUEST:
 				// Logout-Request vom Client empfangen
 				logoutRequestAction(receivedPdu);
 				break;
-				
-			case MESSAGE_CONFIRM: //advanced 
+
+			case MESSAGE_CONFIRM: // advanced
 				chatMessageConfirmAction(receivedPdu);
-			break;
-			
+				break;
+
 			default:
 				log.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName() + ", PduType: "
 						+ receivedPdu.getPduType());
@@ -432,10 +432,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		}
 	}
 
-
-
 	private void chatMessageConfirmAction(ChatPDU receivedPdu) {
 		// TODO Auto-generated method stub
-		log.debug("/n /n ICH HABE EINE CONFIRM NACHRICHT BEKOMMEN VON " + receivedPdu.getEventUserName()); //nur test
+		log.debug("/n /n ICH HABE EINE CONFIRM NACHRICHT BEKOMMEN VON " + receivedPdu.getEventUserName()); // nur test
 	}
 }
