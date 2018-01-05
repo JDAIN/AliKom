@@ -28,7 +28,7 @@ public class SharedChatClientList {
 
 	private static Log log = LogFactory.getLog(SharedChatClientList.class);
 	// Liste aller eingeloggten Clients
-	private static ConcurrentHashMap<String, ClientListEntry> clients;
+	private static ConcurrentHashMap<String, ClientListEntry> clients; 
 
 	private static SharedChatClientList instance;
 

@@ -201,7 +201,7 @@ public class ClientListEntry {
 		this.waitList = list;
 		log.debug("Warteliste von " + this.userName + ": " + waitList);
 	}
-
+	
 	public synchronized void addWaitListEntry(String userName) {
 		this.waitList.add(userName);
 		log.debug("Warteliste von " + this.userName + " ergaenzt um " + userName);

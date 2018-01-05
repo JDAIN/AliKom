@@ -77,23 +77,16 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	 * @param receivedPdu
 	 *            Ankommende PDU
 	 */
-	protected void chatMessageConfirmAction(ChatPDU receivedPdu) throws IOException { // TODO:
-		// DELETE
-		// zweite
-		// debug
-		// ausgabe
+	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
 
 		try {
-
 			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getEventUserName(), receivedPdu));
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Chat-Confirm-Event-PDU zur Nachricht von "
 					+ receivedPdu.getEventUserName());
-			log.debug(" ADCANCED TEST PLS DELETE  getNameString:   " + getName().toString() + "copy of receivedPDU     "
-					+ receivedPdu.toString());
 
 		} catch (Exception e) {
-			log.debug("Senden der Confim-Nachricht nicht moeglich");
-			throw new IOException();
+			log.debug("Senden der Confim-Nachricht von " + receivedPdu.getUserName() + "nicht moeglich");
+			log.debug("Exception Message: " + e.getMessage());
 		}
 	}
 
@@ -222,11 +215,8 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 						// Chat-Nachricht vom Server gesendet
 						chatMessageEventAction(receivedPdu);
 						// aufruf vom MessageConfirm (advanced)
-						try {
-							chatMessageConfirmAction(receivedPdu);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						chatMessageConfirmAction(receivedPdu);
+
 						break;
 
 					default:

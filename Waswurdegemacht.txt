@@ -12,3 +12,9 @@
 12. bug entdeckt vergessen beim client auf advanced zu wechselnt. Immo noch simpellistner in verwendung....
 13. bug gefixt, jetzt im clientimpl wird der advanced oder simple je nach systemconstant ausgewählt 
 14. clientseitig jetzt komplett funktionfähig +javadoc 
+17. Confirm IoException entfernt und weiter angepasst(ähnlich wie server jetzt)
+FEHLEND: nachricht anpassen wenn confirmed mit hacken
+
+
+15. in common/clientlistentry waitlist und addwaitlistentry werden wir benutzen müssen
+16. ab logoutrequestaction weiterlesen und verstehen
