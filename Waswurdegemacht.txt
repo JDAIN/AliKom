@@ -1,3 +1,4 @@
+CLIENT + GUI
 1. farbe angepasst 
 2. Klassen erstellt für advanced client +server
 3. GUI anpassungen dummy, fkt noch nicht richtig //TODO anpassen
@@ -13,8 +14,10 @@
 13. bug gefixt, jetzt im clientimpl wird der advanced oder simple je nach systemconstant ausgewählt 
 14. clientseitig jetzt komplett funktionfähig +javadoc 
 17. Confirm IoException entfernt und weiter angepasst(ähnlich wie server jetzt)
-FEHLEND: nachricht anpassen wenn confirmed mit hacken
+18. confirm aufruf wieder in ChatMessageEvent....
+FEHLEND: nachricht anpassen wenn confirmed mit haken
 
-
+SERVER
 15. in common/clientlistentry waitlist und addwaitlistentry werden wir benutzen müssen
 16. ab logoutrequestaction weiterlesen und verstehen
+19. Chatmessageresponse aus request entfernt und in ChatMessageConfirm aufgerufen. FEHLEND: veränderungen der ganzen Counter usw soviel richtiger confirm.

@@ -14,8 +14,8 @@ import edu.hm.dako.chat.connection.ConnectionTimeoutException;
 import edu.hm.dako.chat.connection.EndOfFileException;
 
 /**
- * Advanced Worker-Thread zur serverseitigen Bedienung einer Session mit einem Client.
- * Jedem Chat-Client wird serverseitig ein Worker-Thread zugeordnet.
+ * Advanced Worker-Thread zur serverseitigen Bedienung einer Session mit einem
+ * Client. Jedem Chat-Client wird serverseitig ein Worker-Thread zugeordnet.
  * 
  * @author Jannis Ditterich
  */
@@ -161,8 +161,10 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			sendLoginListUpdateEvent(pdu);
 			serverGuiInterface.decrNumberOfLoggedInClients();
 
-			// Der Thread muss hier noch warten, bevor ein Logout-Response gesendet
-			// wird, da sich sonst ein Client abmeldet, bevor er seinen letzten Event
+			// Der Thread muss hier noch warten, bevor ein Logout-Response
+			// gesendet
+			// wird, da sich sonst ein Client abmeldet, bevor er seinen letzten
+			// Event
 			// empfangen hat. das funktioniert nicht bei einer grossen Anzahl an
 			// Clients (kalkulierte Events stimmen dann nicht mit tatsaechlich
 			// empfangenen Events ueberein.
@@ -226,26 +228,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				}
 			}
 
-			client = clients.getClient(receivedPdu.getUserName());
-			if (client != null) {
-				ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(), 0, 0, 0, 0,
-						client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
-						(System.nanoTime() - client.getStartTime()));
-
-				if (responsePdu.getServerTime() / 1000000 > 100) {
-					log.debug(Thread.currentThread().getName()
-							+ ", Benoetigte Serverzeit vor dem Senden der Response-Nachricht > 100 ms: "
-							+ responsePdu.getServerTime() + " ns = " + responsePdu.getServerTime() / 1000000 + " ms");
-				}
-
-				try {
-					client.getConnection().send(responsePdu);
-					log.debug("Chat-Message-Response-PDU an " + receivedPdu.getUserName() + " gesendet");
-				} catch (Exception e) {
-					log.debug("Senden einer Chat-Message-Response-PDU an " + client.getUserName() + " nicht moeglich");
-					ExceptionHandler.logExceptionAndTerminate(e);
-				}
-			}
 			log.debug("Aktuelle Laenge der Clientliste: " + clients.size());
 		}
 	}
@@ -369,10 +351,12 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 			if (clients.getClient(userName) != null) {
 				if (clients.getClient(userName).getStatus() == ClientConversationStatus.UNREGISTERING) {
-					// Worker-Thread wartet auf eine Nachricht vom Client, aber es
+					// Worker-Thread wartet auf eine Nachricht vom Client, aber
+					// es
 					// kommt nichts mehr an
 					log.error("Client ist im Zustand UNREGISTERING und bekommt aber keine Nachricht mehr");
-					// Zur Sicherheit eine Logout-Response-PDU an Client senden und
+					// Zur Sicherheit eine Logout-Response-PDU an Client senden
+					// und
 					// dann Worker-Thread beenden
 					finished = true;
 				}
@@ -408,7 +392,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			case CHAT_MESSAGE_REQUEST:
 				// Chat-Nachricht angekommen, an alle verteilen
 				chatMessageRequestAction(receivedPdu);
-				// log.debug("REQUEST TESTZEILE______________________________"); //wir
+				// log.debug("REQUEST TESTZEILE______________________________");
+				// //wir
 				// aufgerufen nach message request nur test TODO DELETE
 				break;
 
@@ -432,8 +417,34 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		}
 	}
 
-	private void chatMessageConfirmAction(ChatPDU receivedPdu) {
+	@Override
+	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
 		// TODO Auto-generated method stub
-		log.debug("/n /n ICH HABE EINE CONFIRM NACHRICHT BEKOMMEN VON " + receivedPdu.getEventUserName()); // nur test
+		log.debug("/n /n ICH HABE EINE CONFIRM NACHRICHT BEKOMMEN VON " + receivedPdu.getEventUserName()); // test
+
+		// nur aus ChatmessageRequestACtion kopiert
+		ClientListEntry client = null; // ka ob das passt
+		// erstellen des ChatMessageResponse
+		client = clients.getClient(receivedPdu.getUserName());
+		if (client != null) {
+			ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(), 0, 0, 0, 0,
+					client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
+					(System.nanoTime() - client.getStartTime()));
+
+			if (responsePdu.getServerTime() / 1000000 > 100) {
+				log.debug(Thread.currentThread().getName()
+						+ ", Benoetigte Serverzeit vor dem Senden der Response-Nachricht > 100 ms: "
+						+ responsePdu.getServerTime() + " ns = " + responsePdu.getServerTime() / 1000000 + " ms");
+			}
+			// senden des ChatMessageResponse
+			try {
+				client.getConnection().send(responsePdu);
+				log.debug("Chat-Message-Response-PDU an " + receivedPdu.getUserName() + " gesendet");
+			} catch (Exception e) {
+				log.debug("Senden einer Chat-Message-Response-PDU an " + client.getUserName() + " nicht moeglich");
+				ExceptionHandler.logExceptionAndTerminate(e);
+			}
+		}
+		log.debug("Aktuelle Laenge der Clientliste: " + clients.size());
 	}
 }

@@ -68,11 +68,13 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		// Darstellung uebergeben
 		userInterface.setMessageLine(receivedPdu.getEventUserName(), (String) receivedPdu.getMessage());
 
+		// aufruf vom MessageConfirm (advanced)
+		chatMessageConfirmAction(receivedPdu);
 	}
 
 	/**
-	 * Aktion zur Behandlung ankommender Message-Confirms. Wird im chatMessageEvent
-	 * aufgerufen.
+	 * Aktion zur Behandlung ankommender Message-Confirms. Wird im
+	 * chatMessageEvent aufgerufen.
 	 * 
 	 * @param receivedPdu
 	 *            Ankommende PDU
@@ -214,8 +216,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 					case CHAT_MESSAGE_EVENT:
 						// Chat-Nachricht vom Server gesendet
 						chatMessageEventAction(receivedPdu);
-						// aufruf vom MessageConfirm (advanced)
-						chatMessageConfirmAction(receivedPdu);
 
 						break;
 

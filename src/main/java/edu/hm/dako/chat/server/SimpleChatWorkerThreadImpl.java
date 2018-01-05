@@ -453,4 +453,10 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 			ExceptionHandler.logExceptionAndTerminate(e);
 		}
 	}
+
+	@Override
+	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
+		// TODO Auto-generated method stub
+		
+	}
 }

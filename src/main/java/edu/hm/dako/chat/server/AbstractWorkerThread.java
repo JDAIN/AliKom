@@ -81,7 +81,7 @@ public abstract class AbstractWorkerThread extends Thread {
 	 * 
 	 * @param receivedPdu
 	 */
-
+	protected abstract void chatMessageConfirmAction(ChatPDU receivedPdu);
 	/**
 	 * Verarbeitung einer ankommenden Nachricht eines Clients (Implementierung des
 	 * serverseitigen Chat-Zustandsautomaten)
