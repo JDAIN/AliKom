@@ -21,3 +21,4 @@ SERVER
 15. in common/clientlistentry waitlist und addwaitlistentry werden wir benutzen müssen
 16. ab logoutrequestaction weiterlesen und verstehen
 19. Chatmessageresponse aus request entfernt und in ChatMessageConfirm aufgerufen. FEHLEND: veränderungen der ganzen Counter usw soviel richtiger confirm.
+20. confirmAction logs geaddet und kommentare

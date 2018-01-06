@@ -419,8 +419,14 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 	@Override
 	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
-		// TODO Auto-generated method stub
-		log.debug("/n /n ICH HABE EINE CONFIRM NACHRICHT BEKOMMEN VON " + receivedPdu.getEventUserName()); // test
+
+		log.debug("\n \n ICH HABE EINE CONFIRM NACHRICHT BEKOMMEN VON " + receivedPdu.getEventUserName()); // test
+		
+		confirmCounter.incrementAndGet();
+		// gesendeter chatmessages vom client immer 0 eventuell entfernen später
+		log.debug("ADVANCED: " + userName + ": ConfirmCounter erhoeht = " + confirmCounter.get()
+				+ ", Aktueller EventCounter = " + eventCounter.get()
+				+ ", Anzahl gesendeter ChatMessages von dem Client = " + receivedPdu.getSequenceNumber()); 
 
 		// nur aus ChatmessageRequestACtion kopiert
 		ClientListEntry client = null; // ka ob das passt
@@ -436,7 +442,10 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 						+ ", Benoetigte Serverzeit vor dem Senden der Response-Nachricht > 100 ms: "
 						+ responsePdu.getServerTime() + " ns = " + responsePdu.getServerTime() / 1000000 + " ms");
 			}
+			
+			//erst senden wenn von jedem confirm da 
 			// senden des ChatMessageResponse
+			//clientlistentry  waitList methoden dazu unten
 			try {
 				client.getConnection().send(responsePdu);
 				log.debug("Chat-Message-Response-PDU an " + receivedPdu.getUserName() + " gesendet");
