@@ -439,7 +439,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				+ ", Aktueller EventCounter = " + eventCounter.get()
 				+ ", Anzahl gesendeter ChatMessages von dem Client = " + receivedPdu.getSequenceNumber());
 				//+ " client.numberofRecievedEventCOnfirms:  " +  client.getNumberOfReceivedEventConfirms()); 
-
+		log.debug("\n \n WARTELISTE IN CONFIRMACTION VOR DELETE: \n \n " + clients.printClientList()+ "\n \n  Größe der WAITLIST" + clients.getWaitListSize(receivedPdu.getUserName())); //test
 		try {
 			log.debug("\n \n IM CONFIRM \n vor delete "+ receivedPdu.toString());
 			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
@@ -447,7 +447,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		log.debug("\n \n WARTELISTE IN CONFIRMACTION: \n \n " + clients.printClientList()+ "\n \n  Größe der WAITLIST" + clients.getWaitListSize(receivedPdu.getUserName())); //test
+		log.debug("\n \n WARTELISTE IN CONFIRMACTION AFTER DELETE: \n \n " + clients.printClientList()+ "\n \n  Größe der WAITLIST" + clients.getWaitListSize(receivedPdu.getUserName())); //test
 		
 		
 		if(clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
@@ -456,7 +456,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		
 		
 		// erstellen des ChatMessageResponse
-		client = clients.getClient(receivedPdu.getUserName());
+		client = clients.getClient(receivedPdu.getEventUserName()); //hier event hinzugefügt
 		if (client != null) {
 			ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(), 0, 0, 0, 0,
 					client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),

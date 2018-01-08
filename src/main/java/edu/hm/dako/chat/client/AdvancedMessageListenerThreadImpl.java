@@ -82,7 +82,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
 
 		try {
-			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getEventUserName(), receivedPdu));
+			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getUserName(), receivedPdu)); //hier event weg
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Chat-Confirm-Event-PDU zur Nachricht von "
 					+ receivedPdu.getEventUserName());
 
