@@ -206,7 +206,15 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// Liste der betroffenen Clients ermitteln
 			Vector<String> sendList = clients.getClientNameList();
 			ChatPDU pdu = ChatPDU.createChatMessageEventPdu(userName, receivedPdu);
-
+			
+			//advanced warteliste erstellen
+			clients.createWaitList(receivedPdu.getUserName()); //evt nur username
+			//advanced warteliste füllen
+//			Vector<String> waitList = sendList;
+//			log.debug("WARTELISTE IN MESSAGEREQUESTACTION: " + waitList);
+			log.debug("\n \n WARTELISTE IN MESSAGEREQUESTACTION: \n \n " + clients.printClientList()+ "\n \n  Größe der WAITLIST" + clients.getWaitListSize(receivedPdu.getUserName())); //test
+			
+			
 			// Event an Clients senden
 			for (String s : new Vector<String>(sendList)) {
 				client = clients.getClient(s);
@@ -420,16 +428,33 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	@Override
 	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
 
-		log.debug("\n \n ICH HABE EINE CONFIRM NACHRICHT BEKOMMEN VON " + receivedPdu.getEventUserName()); // test
+		log.debug("ChatMessageConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Nachricht von "+ receivedPdu.getEventUserName()); // test
+		//log.debug("\n \n " + clients.printClientList()+ "\n \n " + clients.getWaitListSize(receivedPdu.getUserName())); //test
+		confirmCounter.incrementAndGet(); //fuer testausgaben
+		//tatsächliche erhöhung
+		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName()); 
 		
-		confirmCounter.incrementAndGet();
 		// gesendeter chatmessages vom client immer 0 eventuell entfernen später
 		log.debug("ADVANCED: " + userName + ": ConfirmCounter erhoeht = " + confirmCounter.get()
 				+ ", Aktueller EventCounter = " + eventCounter.get()
-				+ ", Anzahl gesendeter ChatMessages von dem Client = " + receivedPdu.getSequenceNumber()); 
+				+ ", Anzahl gesendeter ChatMessages von dem Client = " + receivedPdu.getSequenceNumber());
+				//+ " client.numberofRecievedEventCOnfirms:  " +  client.getNumberOfReceivedEventConfirms()); 
 
+		try {
+			log.debug("\n \n IM CONFIRM \n vor delete "+ receivedPdu.toString());
+			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		log.debug("\n \n WARTELISTE IN CONFIRMACTION: \n \n " + clients.printClientList()+ "\n \n  Größe der WAITLIST" + clients.getWaitListSize(receivedPdu.getUserName())); //test
+		
+		
+		if(clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
 		// nur aus ChatmessageRequestACtion kopiert
 		ClientListEntry client = null; // ka ob das passt
+		
+		
 		// erstellen des ChatMessageResponse
 		client = clients.getClient(receivedPdu.getUserName());
 		if (client != null) {
@@ -455,5 +480,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			}
 		}
 		log.debug("Aktuelle Laenge der Clientliste: " + clients.size());
+	}
 	}
 }
