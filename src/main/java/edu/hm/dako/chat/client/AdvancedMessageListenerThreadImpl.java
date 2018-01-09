@@ -9,6 +9,7 @@ import edu.hm.dako.chat.common.ChatPDU;
 import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.connection.Connection;
+import edu.hm.dako.chat.server.ChatServerGUI;
 
 /**
  * Thread wartet auf ankommende Nachrichten vom Server und bearbeitet diese.
@@ -47,6 +48,8 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
 			log.debug("Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
 
+			// änderung des Userinterafaced und hinzufügen des hakens (Meinungen zu diesem)
+			userInterface.changeLastMessageLineToConfirmed();
 		} else {
 			log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName() + " passt nicht: "
 					+ receivedPdu.getSequenceNumber() + "/" + sharedClientData.messageCounter.get());
@@ -82,7 +85,9 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
 
 		try {
-			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getUserName(), receivedPdu)); //hier event weg
+			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getUserName(), receivedPdu)); // hier
+																											// event
+																											// weg
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Chat-Confirm-Event-PDU zur Nachricht von "
 					+ receivedPdu.getEventUserName());
 

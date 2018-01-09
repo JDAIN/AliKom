@@ -46,11 +46,11 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	 * aktivieren
 	 * 
 	 * @param String
-	 *          serverType Servertyp
+	 *            serverType Servertyp
 	 * @param port
-	 *          Serverport
+	 *            Serverport
 	 * @param host
-	 *          Hostname oder IP-Adresse des Servers
+	 *            Hostname oder IP-Adresse des Servers
 	 * @return Referenz auf Kommunikationsobjekt
 	 */
 	public ClientImpl createCommunicator(String serverType, int port, String host) {
@@ -88,35 +88,36 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	 * Benutzeroberflaeche fuer Chat erzeugen
 	 */
 	public void createNextGui() {
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("LoggedInGui.fxml"));
-				Parent root = loader.load();
-				lc2 = loader.getController();
-				lc2.setAppController(this);
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("LoggedInGui.fxml"));
+			Parent root = loader.load();
+			lc2 = loader.getController();
+			lc2.setAppController(this);
 
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						stage.setTitle("Angemeldet");
-						stage.setScene(new Scene(root, 600, 400));
-						root.setStyle("-fx-background-color: #3a4d66");
-					}
-				});
-			} catch (Exception e) {
-				ExceptionHandler.logException(e);
-			}
-			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			Platform.runLater(new Runnable() {
 				@Override
-				public void handle(WindowEvent event) {
-					try {
-						getCommunicator().logout(getModel().getUserName());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				public void run() {
+					stage.setTitle("Angemeldet");
+					stage.setScene(new Scene(root, 600, 400));
+					root.setStyle("-fx-background-color: #3a4d66");
 				}
 			});
+		} catch (Exception e) {
+			ExceptionHandler.logException(e);
+		}
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				try {
+					getCommunicator().logout(getModel().getUserName());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-	public void switchToLogInGui(){
+
+	public void switchToLogInGui() {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("LogInGui.fxml"));
 			Parent root = loader.load();
@@ -130,7 +131,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 					root.setStyle("-fx-background-color: cornsilk");
 				}
 			});
-		} catch (Exception e){
+		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
 
@@ -167,6 +168,21 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 			@Override
 			public void run() {
 				getModel().chats.add(messageText);
+			}
+		});
+	}
+
+	@Override
+	public void changeLastMessageLineToConfirmed() {
+		// runlater benötigt sonst fehler
+		int lastElementPos = getModel().chats.size() - 1;
+		String lastElement = getModel().chats.get(lastElementPos);
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				//bug manchmal beim spammen kommen mehrere haken
+				getModel().chats.set(lastElementPos, lastElement + "     \u2714");
 			}
 		});
 	}
@@ -209,9 +225,8 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	}
 
 	@Override
-	public void setSessionStatisticsCounter(long numberOfSentEvents,
-			long numberOfReceivedConfirms, long numberOfLostConfirms, long numberOfRetries,
-			long numberOfReceivedChatMessages) {
+	public void setSessionStatisticsCounter(long numberOfSentEvents, long numberOfReceivedConfirms,
+			long numberOfLostConfirms, long numberOfRetries, long numberOfReceivedChatMessages) {
 
 	}
 

@@ -27,6 +27,12 @@ public interface ClientUserInterface {
 	 */
 	public void setMessageLine(String sender, String message);
 
+	/*
+	 * Änderung der Gui-Messagezeile, wenn ein Event von allen Clients besätigt wurde
+	 * 
+	 */
+	public void changeLastMessageLineToConfirmed(); 
+	
 	/**
 	 * Sperren bzw. Entsperren der Eingabe von Chat-Nachrichten an der GUI
 	 *

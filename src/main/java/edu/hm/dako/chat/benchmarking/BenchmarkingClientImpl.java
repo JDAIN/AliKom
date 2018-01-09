@@ -490,4 +490,10 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 	public long getNumberOfReceivedChatMessages() {
 		return this.numberOfReceivedChatMessages;
 	}
+
+	@Override
+	public void changeLastMessageLineToConfirmed() {
+		// Wird nicht genutzt, nur fuer ClientGui relevant
+		
+	}
 }

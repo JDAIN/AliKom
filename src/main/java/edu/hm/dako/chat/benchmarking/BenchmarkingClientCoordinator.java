@@ -378,4 +378,10 @@ public class BenchmarkingClientCoordinator extends Thread
 		resultData.setNumberOfRetriedEvents(sharedData.getSumOfAllRetriedEvents());
 		return resultData;
 	}
+
+	@Override
+	public void changeLastMessageLineToConfirmed() {
+		// Wird nicht genutzt, nur fuer ClientGui relevant
+		
+	}
 }

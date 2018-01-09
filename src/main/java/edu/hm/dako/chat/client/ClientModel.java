@@ -30,7 +30,8 @@ public class ClientModel {
 	}
 
 	public ObservableList<String> users = FXCollections.observableArrayList();
-	public ObservableList<String> chats = FXCollections.observableArrayList();
+	//auf static geändert
+	public  ObservableList<String> chats = FXCollections.observableArrayList(); 
 
 	public BooleanProperty block = new SimpleBooleanProperty();
 }

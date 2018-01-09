@@ -18,7 +18,16 @@ CLIENT + GUI
 FEHLEND: nachricht anpassen wenn confirmed mit haken
 
 SERVER
+TODO: KOMMENTARE LÖSCHEN
+TODO: JAVADOC
+TODO: CHECKSTYLE
+TODO: EVT BUG FINDEN WEIL HAKEN DOPPELT (Wahr. weil er hacken setzt ohne sync)
+TODO: LOGIN UND LOGOUT CONFIRM
+
 15. in common/clientlistentry waitlist und addwaitlistentry werden wir benutzen müssen
 16. ab logoutrequestaction weiterlesen und verstehen
 19. Chatmessageresponse aus request entfernt und in ChatMessageConfirm aufgerufen. FEHLEND: veränderungen der ganzen Counter usw soviel richtiger confirm.
 20. confirmAction logs geaddet und kommentare
+21. messageconfirm sollte jetzt mit warteliste fkt
+22. neue Methode erstellt im userinterface changelastMessagetoconfirmed
+23. übergabe ins interface bei client MessageResponseAction
