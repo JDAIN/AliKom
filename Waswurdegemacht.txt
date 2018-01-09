@@ -15,7 +15,8 @@ CLIENT + GUI
 14. clientseitig jetzt komplett funktionfähig +javadoc 
 17. Confirm IoException entfernt und weiter angepasst(ähnlich wie server jetzt)
 18. confirm aufruf wieder in ChatMessageEvent....
-FEHLEND: nachricht anpassen wenn confirmed mit haken
+
+19. Logout und Login confirm pdu erstellt.
 
 SERVER
 TODO: KOMMENTARE LÖSCHEN

@@ -434,42 +434,6 @@ public class ChatPDU implements Serializable {
 	}
 
 	/**
-	 * Erzeugen einer Chat-Message-Confirm-PDU
-	 * 
-	 * @param userName
-	 *            Client, der Chat-Message-Request-PDU gesendet hat
-	 * @param receivedPdu
-	 *            (Chat-Message-Request-PDU)
-	 * @return Erzeugte PDU
-	 * @author Jannis Ditterich
-	 */
-	public static ChatPDU createChatMessageConfirmPdu(String userName, ChatPDU receivedPdu) {
-
-//		ChatPDU pdu = new ChatPDU();
-//		pdu.setPduType(PduType.MESSAGE_CONFIRM);
-//		pdu.setServerThreadName(Thread.currentThread().getName());
-//		pdu.setClientThreadName(receivedPdu.getClientThreadName());
-//		pdu.setUserName(userName);
-//		pdu.setEventUserName(receivedPdu.getEventUserName());
-//		pdu.setSequenceNumber(receivedPdu.getSequenceNumber());
-//		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
-//		pdu.setMessage(receivedPdu.getMessage());
-//		return pdu;
-		
-		ChatPDU pdu = new ChatPDU();
-		pdu.setPduType(PduType.MESSAGE_CONFIRM);
-		pdu.setServerThreadName(Thread.currentThread().getName());
-		pdu.setClientThreadName(receivedPdu.getServerThreadName());
-		pdu.setUserName(userName);
-		pdu.setEventUserName(receivedPdu.getEventUserName());
-		 pdu.setSequenceNumber(receivedPdu.getSequenceNumber());
-		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
-		pdu.setMessage(receivedPdu.getMessage());
-		return pdu;
-
-	}
-
-	/**
 	 * Erzeugen einer Login-Response-PDU mit Fehlermeldung
 	 * 
 	 * @param pdu
@@ -489,4 +453,73 @@ public class ChatPDU implements Serializable {
 		pdu.setErrorCode(errorCode);
 		return pdu;
 	}
+
+	/**
+	 * Erzeugen einer Chat-Message-Confirm-PDU
+	 * 
+	 * @param userName
+	 *            Client, der Chat-Message-Request-PDU gesendet hat
+	 * @param receivedPdu
+	 *            (Chat-Message-Request-PDU)
+	 * @return Erzeugte PDU
+	 * @author Jannis Ditterich
+	 */
+	public static ChatPDU createChatMessageConfirmPdu(String userName, ChatPDU receivedPdu) {
+
+		ChatPDU pdu = new ChatPDU();
+		pdu.setPduType(PduType.MESSAGE_CONFIRM);
+		pdu.setServerThreadName(Thread.currentThread().getName());
+		pdu.setClientThreadName(receivedPdu.getServerThreadName());
+		pdu.setUserName(userName);
+		pdu.setEventUserName(receivedPdu.getEventUserName());
+		pdu.setSequenceNumber(receivedPdu.getSequenceNumber());
+		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
+		pdu.setMessage(receivedPdu.getMessage());
+		return pdu;
+	}
+
+	/**
+	 * Erzeugen einer Chat-Login-Confirm-PDU
+	 * 
+	 * @param userName
+	 *            Client, der Chat-Login-Request-PDU gesendet hat
+	 * @param receivedPdu
+	 *            (Chat-Login-Request-PDU)
+	 * @return Erzeugte PDU
+	 * @author Jannis Ditterich
+	 */
+	public static ChatPDU createLoginConfirmPdu(String userName, ChatPDU receivedPdu) {
+		// evt noch statisikdaten sequenznummer usw
+		ChatPDU pdu = new ChatPDU();
+		pdu.setPduType(PduType.LOGIN_CONFIRM);
+		pdu.setServerThreadName(Thread.currentThread().getName());
+		pdu.setClientThreadName(receivedPdu.getClientThreadName());
+		pdu.setUserName(userName);
+		pdu.setEventUserName(receivedPdu.getEventUserName());
+		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
+		return pdu;
+	}
+
+	/**
+	 * Erzeugen einer Chat-Logout-Confirm-PDU
+	 * 
+	 * @param userName
+	 *            Client, der Chat-Logout-PDU gesendet hat
+	 * @param receivedPdu
+	 *            (Chat-Lougout-Request-PDU)
+	 * @return Erzeugte PDU
+	 * @author Jannis Ditterich
+	 */
+	public static ChatPDU createLogoutConfirmPdu(String userName, ChatPDU receivedPdu) {
+		// evt noch statisikdaten sequenznummer usw
+		ChatPDU pdu = new ChatPDU();
+		pdu.setPduType(PduType.LOGOUT_CONFIRM);
+		pdu.setServerThreadName(Thread.currentThread().getName());
+		pdu.setClientThreadName(receivedPdu.getClientThreadName());
+		pdu.setUserName(userName);
+		pdu.setEventUserName(receivedPdu.getEventUserName());
+		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
+		return pdu;
+	}
+
 }

@@ -128,7 +128,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 				public void run() {
 					stage.setTitle("Anmelden");
 					stage.setScene(new Scene(root, 280, 320));
-					root.setStyle("-fx-background-color: cornsilk");
+					root.setStyle("-fx-background-color: #3a4d66");
 				}
 			});
 		} catch (Exception e) {
@@ -181,9 +181,13 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				//bug manchmal beim spammen kommen mehrere haken
+				//bug manchmal beim spammen kommen mehrere haken(sollte gefixt sein)
+				if(lastElement.contains(" \u2714")) {
+					log.debug("BUG: doppelt haken");
+				} else {
 				getModel().chats.set(lastElementPos, lastElement + "     \u2714");
-			}
+				}
+			}		
 		});
 	}
 
