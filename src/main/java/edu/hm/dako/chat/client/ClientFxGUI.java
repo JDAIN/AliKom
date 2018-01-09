@@ -181,13 +181,15 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				//bug manchmal beim spammen kommen mehrere haken(sollte gefixt sein)
-				if(lastElement.contains(" \u2714")) {
+				// bug manchmal beim spammen kommen mehrere haken(nur gui bug)
+				// sollte gefixt sein
+				if (lastElement.contains(" \u2714")) {
 					log.debug("BUG: doppelt haken");
+					getModel().chats.set(lastElementPos, lastElement + "     \u2714");
 				} else {
-				getModel().chats.set(lastElementPos, lastElement + "     \u2714");
+					getModel().chats.set(lastElementPos, lastElement + "     \u2714");
 				}
-			}		
+			}
 		});
 	}
 
