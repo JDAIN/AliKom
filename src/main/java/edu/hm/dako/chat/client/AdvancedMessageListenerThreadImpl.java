@@ -48,7 +48,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
 			log.debug("Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
 
-			// änderung des Userinterafaced und hinzufügen des hakens (Meinungen zu diesem)
+			// änderung des Userinterafaced und hinzufügen des hakens 
 			userInterface.changeLastMessageLineToConfirmed();
 		} else {
 			log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName() + " passt nicht: "
@@ -76,8 +76,8 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	}
 
 	/**
-	 * Aktion zur Behandlung ankommender Message-Confirms. Wird im
-	 * chatMessageEvent aufgerufen.
+	 * Aktion zur Behandlung ankommender Message-Confirms. Wird im chatMessageEvent
+	 * aufgerufen.
 	 * 
 	 * @param receivedPdu
 	 *            Ankommende PDU
@@ -93,6 +93,36 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
 		} catch (Exception e) {
 			log.debug("Senden der Confim-Nachricht von " + receivedPdu.getUserName() + "nicht moeglich");
+			log.debug("Exception Message: " + e.getMessage());
+		}
+	}
+
+	protected void loginConfirmAction(ChatPDU receivedPdu) {
+
+		try {
+			connection.send(ChatPDU.createLoginConfirmPdu(receivedPdu.getUserName(), receivedPdu)); // hier
+																									// event
+																									// weg
+			log.debug("Client " + receivedPdu.getUserName() + " sendet Log-In-Confirm-Event-PDU zum Log In von "
+					+ receivedPdu.getEventUserName());
+
+		} catch (Exception e) {
+			log.debug("Senden der Confim-Log-In-Nachricht von " + receivedPdu.getUserName() + "nicht moeglich");
+			log.debug("Exception Message: " + e.getMessage());
+		}
+	}
+
+	protected void logoutConfirmAction(ChatPDU receivedPdu) {
+
+		try {
+			connection.send(ChatPDU.createLogoutConfirmPdu(receivedPdu.getUserName(), receivedPdu)); // hier
+																										// event
+																										// weg
+			log.debug("Client " + receivedPdu.getUserName() + " sendet Log-Out-Confirm-Event-PDU zum Log Out von "
+					+ receivedPdu.getEventUserName());
+
+		} catch (Exception e) {
+			log.debug("Senden der Confim-Log-Out-Nachricht von " + receivedPdu.getUserName() + "nicht moeglich");
 			log.debug("Exception Message: " + e.getMessage());
 		}
 	}
@@ -125,7 +155,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		}
 	}
 
-	@Override // unverändert aus simple
+	@Override // unverändert aus simple +aufruf confirm
 	protected void loginEventAction(ChatPDU receivedPdu) {
 		// Eventzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();
@@ -138,9 +168,12 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
+		//advanced: aufruf von confirm
+		loginConfirmAction(receivedPdu);
+
 	}
 
-	@Override // unverandert aus simple
+	@Override // unverandert aus simple +aufruf confirm
 	protected void logoutEventAction(ChatPDU receivedPdu) {
 		// Eventzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();
@@ -153,6 +186,8 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
+		//advanced: aufruf von confim
+		logoutConfirmAction(receivedPdu);
 	}
 
 	@Override

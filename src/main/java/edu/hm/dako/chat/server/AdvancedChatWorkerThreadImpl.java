@@ -413,6 +413,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			case MESSAGE_CONFIRM: // advanced
 				chatMessageConfirmAction(receivedPdu);
 				break;
+				
+			case LOGIN_CONFIRM: //advanced
+				loginConfirmAction(receivedPdu);
 
 			default:
 				log.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName() + ", PduType: "
@@ -423,6 +426,14 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.error("Exception bei der Nachrichtenverarbeitung");
 			ExceptionHandler.logExceptionAndTerminate(e);
 		}
+	}
+
+	private void loginConfirmAction(ChatPDU receivedPdu) {
+		log.debug("LoginConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Login von "+ receivedPdu.getEventUserName()); // test
+		//log.debug("\n \n " + clients.printClientList()+ "\n \n " + clients.getWaitListSize(receivedPdu.getUserName())); //test
+		confirmCounter.incrementAndGet(); //fuer testausgaben
+		//tatsächliche erhöhung
+		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName()); 
 	}
 
 	@Override
