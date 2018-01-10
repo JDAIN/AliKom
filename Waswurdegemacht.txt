@@ -36,3 +36,4 @@ TODO: LOGIN UND LOGOUT CONFIRM
 23. login und logout case und action erstellt und teilweise schon login bearbeitet
 24. BUG zweiter client kann sich nicht anmelden weil client 1 anscheinend irgendwie das nicht confirmt und dadurch keine response geschickt wird 
 	(ich denke ChatPDU ist falsch, muss noch überprüft werden mit recievedPdu.tostring am besten
+	CONFIRM PDU USERNAME == IST IMMER EVENT USER NAME FIXEN IWIE

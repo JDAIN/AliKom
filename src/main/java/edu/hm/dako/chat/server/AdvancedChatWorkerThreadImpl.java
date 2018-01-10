@@ -103,10 +103,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			serverGuiInterface.incrNumberOfLoggedInClients();
 
 			// advanced login warteliste erstellen
-			clients.createWaitList(receivedPdu.getUserName());
-			log.debug("\n \n WARTELISTE IN Loginrequest: \n \n " + clients.printClientList() + "\n Größe der WAITLIST"
-					+ clients.getWaitListSize(receivedPdu.getUserName())); // test
-
+			
 			// Login-Event an alle Clients (auch an den gerade aktuell
 			// anfragenden) senden
 
@@ -132,6 +129,10 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// // Zustand des Clients aendern
 			// clients.changeClientStatus(userName,
 			// ClientConversationStatus.REGISTERED);
+			
+			clients.createWaitList(receivedPdu.getUserName());
+			log.debug("\n \n WARTELISTE IN Loginrequest: \n \n " + clients.printClientList() + "\n Größe der WAITLIST"
+					+ clients.getWaitListSize(receivedPdu.getUserName())); // test
 
 		} else {
 			// User bereits angemeldet, Fehlermeldung an Client senden,
@@ -460,7 +461,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		// wenn warteliste leer ist LoginResponse an Event initiator senden
 		if (clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
 			// Login Response senden
-			ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
+			ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(receivedPdu.getEventUserName(), receivedPdu);
 
 			try {
 				clients.getClient(userName).getConnection().send(responsePdu);
