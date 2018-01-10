@@ -444,37 +444,35 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		confirmCounter.incrementAndGet(); // fuer testausgaben
 		// tatsächliche erhöhung
 		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
+		log.debug(receivedPdu.toString());
+		log.debug("\n \n WARTELISTE IN LOGINCONFRIM VOR DELETE: \n \n " + clients.printClientList()
+				+ "\n \n Größe der WAITLIST " + clients.getWaitListSize(receivedPdu.getUserName())); // test
 
-		 log.debug("\n \n WARTELISTE IN LOGINCONFRIM VOR DELETE: \n \n " +
-		 clients.printClientList()+ "\n \n Größe der WAITLIST " +
-		 clients.getWaitListSize(receivedPdu.getUserName())); //test
-		
 		try {
 			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 log.debug("\n \n WARTELISTE IN LOGINCONFRIM NACH DELETE: \n \n " +
-		 clients.printClientList()+ "\n \n Größe der WAITLIST " +
-		 clients.getWaitListSize(receivedPdu.getUserName())); //test
-		
+		log.debug("\n \n WARTELISTE IN LOGINCONFRIM NACH DELETE: \n \n " + clients.printClientList()
+				+ "\n \n Größe der WAITLIST " + clients.getWaitListSize(receivedPdu.getUserName())); // test
+
 		// wenn warteliste leer ist LoginResponse an Event initiator senden
 		if (clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
-		// Login Response senden
-					ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
+			// Login Response senden
+			ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
 
-					try {
-						clients.getClient(userName).getConnection().send(responsePdu);
-					} catch (Exception e) {
-						log.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
-						log.debug("Exception Message: " + e.getMessage());
-					}
+			try {
+				clients.getClient(userName).getConnection().send(responsePdu);
+			} catch (Exception e) {
+				log.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
+				log.debug("Exception Message: " + e.getMessage());
+			}
 
-					log.debug("Login-Response-PDU an Client " + userName + " gesendet");
+			log.debug("Login-Response-PDU an Client " + userName + " gesendet");
 
-					// Zustand des Clients aendern
-					clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
+			// Zustand des Clients aendern
+			clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
 		}
 	}
 

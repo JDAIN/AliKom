@@ -103,7 +103,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 			connection.send(ChatPDU.createLoginConfirmPdu(receivedPdu.getUserName(), receivedPdu)); // hier
 																									// event
 																									// weg
-			log.debug("Client " + receivedPdu.getUserName() + " sendet Log-In-Confirm-Event-PDU zum Log In von "
+			log.debug("Client " + receivedPdu.getUserName() + " sendet Login-Confirm-Event-PDU zum Login von "
 					+ receivedPdu.getEventUserName());
 
 		} catch (Exception e) {

@@ -479,12 +479,12 @@ public class ChatPDU implements Serializable {
 	}
 
 	/**
-	 * Erzeugen einer Chat-Login-Confirm-PDU
+	 * Erzeugen einer Login-Confirm-PDU
 	 * 
 	 * @param userName
-	 *            Client, der Chat-Login-Request-PDU gesendet hat
+	 *            Client, der Login-Request-PDU gesendet hat
 	 * @param receivedPdu
-	 *            (Chat-Login-Request-PDU)
+	 *            (Login-Request-PDU)
 	 * @return Erzeugte PDU
 	 * @author Jannis Ditterich
 	 */
@@ -496,7 +496,7 @@ public class ChatPDU implements Serializable {
 		pdu.setClientThreadName(receivedPdu.getClientThreadName());
 		pdu.setUserName(userName);
 		pdu.setEventUserName(receivedPdu.getEventUserName());
-		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
+		pdu.setClientStatus(ClientConversationStatus.REGISTERING);
 		return pdu;
 	}
 
