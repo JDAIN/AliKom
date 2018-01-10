@@ -85,7 +85,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 		ChatPDU pdu;
 		log.debug("Login-Request-PDU fuer " + receivedPdu.getUserName() + " empfangen");
-
+log.debug("\n \n \n");
 		// Neuer Client moechte sich einloggen, Client in Client-Liste
 		// eintragen
 		if (!clients.existsClient(receivedPdu.getUserName())) {
@@ -440,6 +440,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	private void loginConfirmAction(ChatPDU receivedPdu) {
 		log.debug("LoginConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Login von "
 				+ receivedPdu.getEventUserName()); // test
+		
 		// log.debug("\n \n " + clients.printClientList()+ "\n \n " +
 		// clients.getWaitListSize(receivedPdu.getUserName())); //test
 		confirmCounter.incrementAndGet(); // fuer testausgaben
@@ -450,6 +451,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				+ "\n \n Größe der WAITLIST " + clients.getWaitListSize(receivedPdu.getUserName())); // test
 
 		try {
+			log.debug("vincent ist komisch im kopf" + receivedPdu.toString());
 			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

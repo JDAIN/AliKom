@@ -100,12 +100,15 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	protected void loginConfirmAction(ChatPDU receivedPdu) {
 
 		try {
-			connection.send(ChatPDU.createLoginConfirmPdu(receivedPdu.getUserName(), receivedPdu)); // hier
+		//hier bug noch nicht vorhanden, erst im server
+			log.debug("iwas");
+			log.debug("\n ganz viel shit \n" +sharedClientData.userName + "\n ganz viel shit \n");
+			connection.send(ChatPDU.createLoginConfirmPdu(sharedClientData.userName , receivedPdu)); // hier
 																									// event
 																									// weg
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Login-Confirm-Event-PDU zum Login von "
 					+ receivedPdu.getEventUserName());
-
+log.debug("\n \n loginconfirmaction" + receivedPdu.toString());
 		} catch (Exception e) {
 			log.debug("Senden der Confim-Log-In-Nachricht von " + receivedPdu.getUserName() + "nicht moeglich");
 			log.debug("Exception Message: " + e.getMessage());
@@ -162,7 +165,8 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		int events = SharedClientData.loginEvents.incrementAndGet();
 
 		log.debug(sharedClientData.userName + " erhaelt LoginEvent, LoginEventCounter: " + events);
-
+		log.debug("\n \n nummer1 "  + "receivedPDu.username " + receivedPdu.getUserName()
+		+ "reeivedPdu.Eventusername " + receivedPdu.getEventUserName() + "welche PDU " + receivedPdu.getPduType());
 		try {
 			handleUserListEvent(receivedPdu);
 		} catch (Exception e) {
@@ -170,7 +174,9 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		}
 		//advanced: aufruf von confirm
 		loginConfirmAction(receivedPdu);
-
+		log.debug("\n \n numer2  "  + "receivedPDu.username " + receivedPdu.getUserName()
+		+ "reeivedPdu.Eventusername " + receivedPdu.getEventUserName() + "welche PDU " + receivedPdu.getPduType());
+//kein unterschied
 	}
 
 	@Override // unverandert aus simple +aufruf confirm
