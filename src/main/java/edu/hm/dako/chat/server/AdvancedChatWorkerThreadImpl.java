@@ -107,7 +107,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			Vector<String> clientList = clients.getClientNameList();
 			pdu = ChatPDU.createLoginEventPdu(userName, clientList, receivedPdu);
 			sendLoginListUpdateEvent(pdu);
-
+			//advanced: warteliste erstellen für login
 			clients.createWaitList(receivedPdu.getUserName());
 
 		} else {
@@ -120,7 +120,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				log.debug("Login-Response-PDU an " + receivedPdu.getUserName() + " mit Fehlercode "
 						+ ChatPDU.LOGIN_ERROR + " gesendet");
 			} catch (Exception e) {
-				log.debug("Senden einer Login-Response-PDU an " + receivedPdu.getUserName() + " nicth moeglich");
+				log.debug("Senden einer Login-Response-PDU an " + receivedPdu.getUserName() + " nicht moeglich");
 				ExceptionHandler.logExceptionAndTerminate(e);
 			}
 		}
@@ -143,25 +143,44 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			Vector<String> clientList = clients.getClientNameList();
 			pdu = ChatPDU.createLogoutEventPdu(userName, clientList, receivedPdu);
 
-			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERING);
-			sendLoginListUpdateEvent(pdu);
-			serverGuiInterface.decrNumberOfLoggedInClients();
-			try {
-				Thread.sleep(1000);
-			} catch (Exception e) {
-				ExceptionHandler.logException(e);
-			}
-
-			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERED);
-
-			// Logout Response senden
-			sendLogoutResponse(receivedPdu.getUserName());
-
-			// Worker-Thread des Clients, der den Logout-Request gesendet
-			// hat, auch gleich zum Beenden markieren
-			clients.finish(receivedPdu.getUserName());
-			log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
-					+ clients.size());
+			clients.changeClientStatus(receivedPdu.getUserName(),
+			ClientConversationStatus.UNREGISTERING);
+			 sendLoginListUpdateEvent(pdu);
+			 serverGuiInterface.decrNumberOfLoggedInClients();
+				//advanced: warteliste erstellen für logout
+				clients.createWaitList(receivedPdu.getUserName());
+				log.debug("\n \n logutoutrequestaction waitlist \n "+ clients.printClientList());
+			//// // Der Thread muss hier noch warten, bevor ein Logout-Response
+			//// // gesendet
+			//// // wird, da sich sonst ein Client abmeldet, bevor er seinen
+			// letzten
+			//// // Event
+			//// // empfangen hat. das funktioniert nicht bei einer grossen
+			// Anzahl an
+			//// // Clients (kalkulierte Events stimmen dann nicht mit
+			// tatsaechlich
+			//// // empfangenen Events ueberein.
+			//// // In der Advanced-Variante wird noch ein Confirm gesendet, das
+			// ist
+			//// // sicherer.
+			//// try {
+			//// Thread.sleep(1000);
+			//// } catch (Exception e) {
+			//// ExceptionHandler.logException(e);
+			//// }
+			////
+			//// clients.changeClientStatus(receivedPdu.getUserName(),
+			// ClientConversationStatus.UNREGISTERED);
+			////
+			//// // Logout Response senden
+			//// sendLogoutResponse(receivedPdu.getUserName());
+			////
+			//// // Worker-Thread des Clients, der den Logout-Request gesendet
+			//// // hat, auch gleich zum Beenden markieren
+			//// clients.finish(receivedPdu.getUserName());
+			//// log.debug("Laenge der Clientliste beim Vormerken zum Loeschen
+			// von " + receivedPdu.getUserName() + ": "
+			//// + clients.size());
 		}
 	}
 
@@ -384,7 +403,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			case LOGIN_CONFIRM: // advanced
 				loginConfirmAction(receivedPdu);
 				break;
-				
+
 			case LOGOUT_CONFIRM: // advanced
 				logoutConfirmAction(receivedPdu);
 				break;
@@ -402,17 +421,56 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 	private void logoutConfirmAction(ChatPDU receivedPdu) {
 		log.debug("LogoutConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Logout von "
-				+ receivedPdu.getEventUserName()); 
+				+ receivedPdu.getEventUserName());
 
 		confirmCounter.incrementAndGet(); // fuer testausgaben
 		// tatsächliche erhöhung
 		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
+
+		try {
+			log.debug("\n vor Löschung \n "+ clients.printClientList());
+			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
+			log.debug("\n nach Löschung \n "+ clients.printClientList());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		// wenn warteliste leer ist LoginResponse an Event initiator senden
+				if (clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
+					
+				
+		// Der Thread muss hier noch warten, bevor ein Logout-Response
+		// gesendet
+		// wird, da sich sonst ein Client abmeldet, bevor er seinen letzten
+		// Event
+		// empfangen hat. das funktioniert nicht bei einer grossen Anzahl an
+		// Clients (kalkulierte Events stimmen dann nicht mit tatsaechlich
+		// empfangenen Events ueberein.
+		// In der Advanced-Variante wird noch ein Confirm gesendet, das ist
+		// sicherer.
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			ExceptionHandler.logException(e);
+		}
+
+		clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERED);
+
+		// Logout Response senden
+		sendLogoutResponse(receivedPdu.getUserName());
+
+		// Worker-Thread des Clients, der den Logout-Request gesendet
+		// hat, auch gleich zum Beenden markieren
+		clients.finish(receivedPdu.getUserName());
+		log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
+				+ clients.size());
+				}
 	}
 
 	private void loginConfirmAction(ChatPDU receivedPdu) {
 		log.debug("LoginConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Login von "
-				+ receivedPdu.getEventUserName()); 
+				+ receivedPdu.getEventUserName());
 
 		confirmCounter.incrementAndGet(); // fuer testausgaben
 		// tatsächliche erhöhung

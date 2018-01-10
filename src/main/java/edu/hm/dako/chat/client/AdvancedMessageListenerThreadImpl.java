@@ -112,7 +112,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	protected void logoutConfirmAction(ChatPDU receivedPdu) {
 
 		try {
-			connection.send(ChatPDU.createLogoutConfirmPdu(receivedPdu.getUserName(), receivedPdu));
+			connection.send(ChatPDU.createLogoutConfirmPdu(sharedClientData.userName , receivedPdu));
 			
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Log-Out-Confirm-Event-PDU zum Log Out von "
 					+ receivedPdu.getEventUserName());

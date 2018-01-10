@@ -35,3 +35,5 @@ TODO: LOGOUT CONFIRM
 
 23. login und logout case und action erstellt und teilweise schon login bearbeitet
 24. login confirm fkt jetzt komplett
+
+25. BUG: logout confirm waitlist immer leer
