@@ -23,7 +23,7 @@ TODO: KOMMENTARE LÖSCHEN
 TODO: JAVADOC
 TODO: CHECKSTYLE
 TODO: EVT BUG FINDEN WEIL HAKEN DOPPELT (Wahr. weil er hacken setzt ohne sync)
-TODO: LOGIN UND LOGOUT CONFIRM
+TODO: LOGOUT CONFIRM
 
 15. in common/clientlistentry waitlist und addwaitlistentry werden wir benutzen müssen
 16. ab logoutrequestaction weiterlesen und verstehen
@@ -34,6 +34,4 @@ TODO: LOGIN UND LOGOUT CONFIRM
 23. übergabe ins interface bei client MessageResponseAction
 
 23. login und logout case und action erstellt und teilweise schon login bearbeitet
-24. BUG zweiter client kann sich nicht anmelden weil client 1 anscheinend irgendwie das nicht confirmt und dadurch keine response geschickt wird 
-	(ich denke ChatPDU ist falsch, muss noch überprüft werden mit recievedPdu.tostring am besten
-	CONFIRM PDU USERNAME == IST IMMER EVENT USER NAME FIXEN IWIE
+24. login confirm fkt jetzt komplett

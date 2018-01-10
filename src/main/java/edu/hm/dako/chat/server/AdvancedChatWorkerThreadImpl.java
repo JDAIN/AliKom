@@ -84,8 +84,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	protected void loginRequestAction(ChatPDU receivedPdu) {
 
 		ChatPDU pdu;
-		log.debug("Login-Request-PDU fuer " + receivedPdu.getUserName() + " empfangen");
-log.debug("\n \n \n");
+
 		// Neuer Client moechte sich einloggen, Client in Client-Liste
 		// eintragen
 		if (!clients.existsClient(receivedPdu.getUserName())) {
@@ -102,37 +101,14 @@ log.debug("\n \n \n");
 			log.debug("Laenge der Clientliste: " + clients.size());
 			serverGuiInterface.incrNumberOfLoggedInClients();
 
-			// advanced login warteliste erstellen
-			
 			// Login-Event an alle Clients (auch an den gerade aktuell
 			// anfragenden) senden
 
 			Vector<String> clientList = clients.getClientNameList();
 			pdu = ChatPDU.createLoginEventPdu(userName, clientList, receivedPdu);
 			sendLoginListUpdateEvent(pdu);
-			// in Confirm action aufgerufen
-			// // Login Response senden
-			// ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName,
-			// receivedPdu);
-			//
-			// try {
-			// clients.getClient(userName).getConnection().send(responsePdu);
-			// } catch (Exception e) {
-			// log.debug("Senden einer Login-Response-PDU an " + userName + "
-			// fehlgeschlagen");
-			// log.debug("Exception Message: " + e.getMessage());
-			// }
-			//
-			// log.debug("Login-Response-PDU an Client " + userName + "
-			// gesendet");
-			//
-			// // Zustand des Clients aendern
-			// clients.changeClientStatus(userName,
-			// ClientConversationStatus.REGISTERED);
-			
+
 			clients.createWaitList(receivedPdu.getUserName());
-			log.debug("\n \n WARTELISTE IN Loginrequest: \n \n " + clients.printClientList() + "\n Größe der WAITLIST"
-					+ clients.getWaitListSize(receivedPdu.getUserName())); // test
 
 		} else {
 			// User bereits angemeldet, Fehlermeldung an Client senden,
@@ -170,17 +146,6 @@ log.debug("\n \n \n");
 			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERING);
 			sendLoginListUpdateEvent(pdu);
 			serverGuiInterface.decrNumberOfLoggedInClients();
-
-			// Der Thread muss hier noch warten, bevor ein Logout-Response
-			// gesendet
-			// wird, da sich sonst ein Client abmeldet, bevor er seinen letzten
-			// Event
-			// empfangen hat. das funktioniert nicht bei einer grossen Anzahl an
-			// Clients (kalkulierte Events stimmen dann nicht mit tatsaechlich
-			// empfangenen Events ueberein.
-			// In der Advanced-Variante wird noch ein Confirm gesendet, das ist
-			// sicherer.
-
 			try {
 				Thread.sleep(1000);
 			} catch (Exception e) {
@@ -219,10 +184,6 @@ log.debug("\n \n \n");
 
 			// advanced warteliste erstellen
 			clients.createWaitList(receivedPdu.getUserName());
-
-			// log.debug("\n \n WARTELISTE IN MESSAGEREQUESTACTION: \n \n " +
-			// clients.printClientList()+ "\n \n Größe der WAITLIST" +
-			// clients.getWaitListSize(receivedPdu.getUserName())); //test
 
 			// Event an Clients senden
 			for (String s : new Vector<String>(sendList)) {
@@ -409,9 +370,6 @@ log.debug("\n \n \n");
 			case CHAT_MESSAGE_REQUEST:
 				// Chat-Nachricht angekommen, an alle verteilen
 				chatMessageRequestAction(receivedPdu);
-				// log.debug("REQUEST TESTZEILE______________________________");
-				// //wir
-				// aufgerufen nach message request nur test TODO DELETE
 				break;
 
 			case LOGOUT_REQUEST:
@@ -425,6 +383,11 @@ log.debug("\n \n \n");
 
 			case LOGIN_CONFIRM: // advanced
 				loginConfirmAction(receivedPdu);
+				break;
+				
+			case LOGOUT_CONFIRM: // advanced
+				logoutConfirmAction(receivedPdu);
+				break;
 
 			default:
 				log.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName() + ", PduType: "
@@ -437,28 +400,30 @@ log.debug("\n \n \n");
 		}
 	}
 
-	private void loginConfirmAction(ChatPDU receivedPdu) {
-		log.debug("LoginConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Login von "
-				+ receivedPdu.getEventUserName()); // test
-		
-		// log.debug("\n \n " + clients.printClientList()+ "\n \n " +
-		// clients.getWaitListSize(receivedPdu.getUserName())); //test
+	private void logoutConfirmAction(ChatPDU receivedPdu) {
+		log.debug("LogoutConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Logout von "
+				+ receivedPdu.getEventUserName()); 
+
 		confirmCounter.incrementAndGet(); // fuer testausgaben
 		// tatsächliche erhöhung
 		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
-		log.debug(receivedPdu.toString());
-		log.debug("\n \n WARTELISTE IN LOGINCONFRIM VOR DELETE: \n \n " + clients.printClientList()
-				+ "\n \n Größe der WAITLIST " + clients.getWaitListSize(receivedPdu.getUserName())); // test
+		
+	}
+
+	private void loginConfirmAction(ChatPDU receivedPdu) {
+		log.debug("LoginConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Login von "
+				+ receivedPdu.getEventUserName()); 
+
+		confirmCounter.incrementAndGet(); // fuer testausgaben
+		// tatsächliche erhöhung
+		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
 
 		try {
-			log.debug("vincent ist komisch im kopf" + receivedPdu.toString());
 			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		log.debug("\n \n WARTELISTE IN LOGINCONFRIM NACH DELETE: \n \n " + clients.printClientList()
-				+ "\n \n Größe der WAITLIST " + clients.getWaitListSize(receivedPdu.getUserName())); // test
 
 		// wenn warteliste leer ist LoginResponse an Event initiator senden
 		if (clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
@@ -484,43 +449,25 @@ log.debug("\n \n \n");
 
 		log.debug("ChatMessageConfirm empfangen von Client" + receivedPdu.getUserName() + " zu Nachricht von "
 				+ receivedPdu.getEventUserName()); // test
-		// log.debug("\n \n " + clients.printClientList()+ "\n \n " +
-		// clients.getWaitListSize(receivedPdu.getUserName())); //test
+
 		confirmCounter.incrementAndGet(); // fuer testausgaben
 		// tatsächliche erhöhung
 		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
 
-		// gesendeter chatmessages vom client immer 0 eventuell entfernen später
-		// log.debug("ADVANCED: " + userName + ": ConfirmCounter erhoeht = " +
-		// confirmCounter.get()
-		// + ", Aktueller EventCounter = " + eventCounter.get()
-		// + ", Anzahl gesendeter ChatMessages von dem Client = " +
-		// receivedPdu.getSequenceNumber());
-		// + " client.numberofRecievedEventCOnfirms: " +
-		// client.getNumberOfReceivedEventConfirms());
-		// log.debug("\n \n WARTELISTE IN CONFIRMACTION VOR DELETE: \n \n " +
-		// clients.printClientList()+ "\n \n Größe der WAITLIST " +
-		// clients.getWaitListSize(receivedPdu.getUserName())); //test
 		try {
-			// log.debug("\n \n IM CONFIRM \n vor delete "+
-			// receivedPdu.toString());
+
 			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		// log.debug("\n \n WARTELISTE IN CONFIRMACTION NACH DELETE: \n \n " +
-		// clients.printClientList()+ "\n \n Größe der WAITLIST " +
-		// clients.getWaitListSize(receivedPdu.getUserName())); //test
 
 		if (clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
 			// nur aus ChatmessageRequestACtion kopiert
-			ClientListEntry client = null; // ka ob das passt
+			ClientListEntry client = null;
 
 			// erstellen des ChatMessageResponse
-			client = clients.getClient(receivedPdu.getEventUserName()); // hier
-																		// event
-																		// hinzugefügt
+			client = clients.getClient(receivedPdu.getEventUserName());
 			if (client != null) {
 				ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(), 0, 0, 0, 0,
 						client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),

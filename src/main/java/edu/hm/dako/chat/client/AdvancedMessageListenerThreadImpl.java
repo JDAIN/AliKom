@@ -85,9 +85,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	protected void chatMessageConfirmAction(ChatPDU receivedPdu) {
 
 		try {
-			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getUserName(), receivedPdu)); // hier
-																											// event
-																											// weg
+			connection.send(ChatPDU.createChatMessageConfirmPdu(receivedPdu.getUserName(), receivedPdu));
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Chat-Confirm-Event-PDU zur Nachricht von "
 					+ receivedPdu.getEventUserName());
 
@@ -100,15 +98,11 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	protected void loginConfirmAction(ChatPDU receivedPdu) {
 
 		try {
-		//hier bug noch nicht vorhanden, erst im server
-			log.debug("iwas");
-			log.debug("\n ganz viel shit \n" +sharedClientData.userName + "\n ganz viel shit \n");
-			connection.send(ChatPDU.createLoginConfirmPdu(sharedClientData.userName , receivedPdu)); // hier
-																									// event
-																									// weg
+			connection.send(ChatPDU.createLoginConfirmPdu(sharedClientData.userName , receivedPdu)); 
+			
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Login-Confirm-Event-PDU zum Login von "
 					+ receivedPdu.getEventUserName());
-log.debug("\n \n loginconfirmaction" + receivedPdu.toString());
+
 		} catch (Exception e) {
 			log.debug("Senden der Confim-Log-In-Nachricht von " + receivedPdu.getUserName() + "nicht moeglich");
 			log.debug("Exception Message: " + e.getMessage());
@@ -118,9 +112,8 @@ log.debug("\n \n loginconfirmaction" + receivedPdu.toString());
 	protected void logoutConfirmAction(ChatPDU receivedPdu) {
 
 		try {
-			connection.send(ChatPDU.createLogoutConfirmPdu(receivedPdu.getUserName(), receivedPdu)); // hier
-																										// event
-																										// weg
+			connection.send(ChatPDU.createLogoutConfirmPdu(receivedPdu.getUserName(), receivedPdu));
+			
 			log.debug("Client " + receivedPdu.getUserName() + " sendet Log-Out-Confirm-Event-PDU zum Log Out von "
 					+ receivedPdu.getEventUserName());
 
@@ -165,8 +158,6 @@ log.debug("\n \n loginconfirmaction" + receivedPdu.toString());
 		int events = SharedClientData.loginEvents.incrementAndGet();
 
 		log.debug(sharedClientData.userName + " erhaelt LoginEvent, LoginEventCounter: " + events);
-		log.debug("\n \n nummer1 "  + "receivedPDu.username " + receivedPdu.getUserName()
-		+ "reeivedPdu.Eventusername " + receivedPdu.getEventUserName() + "welche PDU " + receivedPdu.getPduType());
 		try {
 			handleUserListEvent(receivedPdu);
 		} catch (Exception e) {
@@ -174,9 +165,7 @@ log.debug("\n \n loginconfirmaction" + receivedPdu.toString());
 		}
 		//advanced: aufruf von confirm
 		loginConfirmAction(receivedPdu);
-		log.debug("\n \n numer2  "  + "receivedPDu.username " + receivedPdu.getUserName()
-		+ "reeivedPdu.Eventusername " + receivedPdu.getEventUserName() + "welche PDU " + receivedPdu.getPduType());
-//kein unterschied
+
 	}
 
 	@Override // unverandert aus simple +aufruf confirm
