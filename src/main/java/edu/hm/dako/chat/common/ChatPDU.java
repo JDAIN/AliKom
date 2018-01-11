@@ -498,7 +498,7 @@ public class ChatPDU implements Serializable {
 
 		pdu.setEventUserName(receivedPdu.getEventUserName());
 
-		pdu.setClientStatus(ClientConversationStatus.REGISTERING);
+		pdu.setClientStatus(ClientConversationStatus.REGISTERED); //evt noch auf registered
 		
 		return pdu;
 	}

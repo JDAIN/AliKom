@@ -138,17 +138,18 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		if (!clients.existsClient(userName)) {
 			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
 		} else {
-
+			
 			// Event an Client versenden
 			Vector<String> clientList = clients.getClientNameList();
 			pdu = ChatPDU.createLogoutEventPdu(userName, clientList, receivedPdu);
 
+			clients.createWaitList(userName);
 			clients.changeClientStatus(receivedPdu.getUserName(),
 			ClientConversationStatus.UNREGISTERING);
 			 sendLoginListUpdateEvent(pdu);
 			 serverGuiInterface.decrNumberOfLoggedInClients();
 				//advanced: warteliste erstellen für logout
-				clients.createWaitList(receivedPdu.getUserName());
+				
 				log.debug("\n \n logutoutrequestaction waitlist \n "+ clients.printClientList());
 			//// // Der Thread muss hier noch warten, bevor ein Logout-Response
 			//// // gesendet
@@ -455,14 +456,14 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			ExceptionHandler.logException(e);
 		}
 
-		clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERED);
+		clients.changeClientStatus(receivedPdu.getEventUserName(), ClientConversationStatus.UNREGISTERED);
 
 		// Logout Response senden
-		sendLogoutResponse(receivedPdu.getUserName());
-
+		sendLogoutResponse(receivedPdu.getEventUserName()); // etv event
+log.debug("sendlogoutresponsepdu: " + receivedPdu.toString());
 		// Worker-Thread des Clients, der den Logout-Request gesendet
 		// hat, auch gleich zum Beenden markieren
-		clients.finish(receivedPdu.getUserName());
+		clients.finish(receivedPdu.getEventUserName());
 		log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
 				+ clients.size());
 				}

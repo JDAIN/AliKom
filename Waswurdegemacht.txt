@@ -22,8 +22,9 @@ SERVER
 TODO: KOMMENTARE LÖSCHEN
 TODO: JAVADOC
 TODO: CHECKSTYLE
-TODO: EVT BUG FINDEN WEIL HAKEN DOPPELT (Wahr. weil er hacken setzt ohne sync)
-TODO: LOGOUT CONFIRM
+TODO: EVT BUG FINDEN WEIL HAKEN DOPPELT (Wahr. weil er hacken setzt ohne sync) BUG BEHEBUNG NOCH FALSCH
+TODO: BENCHMARK
+
 
 15. in common/clientlistentry waitlist und addwaitlistentry werden wir benutzen müssen
 16. ab logoutrequestaction weiterlesen und verstehen
@@ -36,4 +37,5 @@ TODO: LOGOUT CONFIRM
 23. login und logout case und action erstellt und teilweise schon login bearbeitet
 24. login confirm fkt jetzt komplett
 
-25. BUG: logout confirm waitlist immer leer
+25. logout confirm fertig und fkt evt noch sleep timer enfernen 
+
