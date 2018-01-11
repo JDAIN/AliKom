@@ -111,7 +111,7 @@ public class SharedClientStatistics {
 	 * Test, ob Client-Id im gueltigen Bereich ist
 	 *
 	 * @param i
-	 *          Client-Id
+	 *            Client-Id
 	 * @return true, falls Client-Id im gueltigen Bereich ist. Sonst false.
 	 */
 	private boolean inRange(int i) {
@@ -123,8 +123,7 @@ public class SharedClientStatistics {
 		}
 	}
 
-	public SharedClientStatistics(int numberOfClients, int numberOfMessages,
-			int clientThinkTime) {
+	public SharedClientStatistics(int numberOfClients, int numberOfMessages, int clientThinkTime) {
 
 		this.numberOfClients = numberOfClients;
 		this.numberOfMessages = numberOfMessages;
@@ -200,7 +199,7 @@ public class SharedClientStatistics {
 	 * Anzahl der gesendeten Nachrichten eines Clients erhoehen
 	 *
 	 * @param i
-	 *          Client-Id
+	 *            Client-Id
 	 */
 	public synchronized void incrSentMsgCounter(int i) {
 		if (!inRange(i))
@@ -293,11 +292,11 @@ public class SharedClientStatistics {
 	 * Anzahl der empfangenen Nachrichten eines Clients erhoehen
 	 *
 	 * @param i
-	 *          Client-Id
+	 *            Client-Id
 	 * @param rtt
-	 *          RoundTrip Time
+	 *            RoundTrip Time
 	 * @param serverTime
-	 *          Die Zeit, die der Server benoetigt hat
+	 *            Die Zeit, die der Server benoetigt hat
 	 */
 	public synchronized void incrReceivedMsgCounter(int i, long rtt, long serverTime) {
 
@@ -315,12 +314,10 @@ public class SharedClientStatistics {
 		}
 
 		clientStatistics[i].sumRTT = clientStatistics[i].sumRTT + rtt;
-		clientStatistics[i].averageRTT = clientStatistics[i].sumRTT
-				/ clientStatistics[i].receivedResponses;
+		clientStatistics[i].averageRTT = clientStatistics[i].sumRTT / clientStatistics[i].receivedResponses;
 		clientStatistics[i].sumServerTime = clientStatistics[i].sumServerTime + serverTime;
 
-		clientStatistics[i].avgServerTime = clientStatistics[i].sumServerTime
-				/ clientStatistics[i].receivedResponses;
+		clientStatistics[i].avgServerTime = clientStatistics[i].sumServerTime / clientStatistics[i].receivedResponses;
 
 		clientStatistics[i].rttList.add((Long) rtt);
 		if (clientStatistics[i].maxHeapSize < usedMemory()) {
@@ -355,7 +352,7 @@ public class SharedClientStatistics {
 	 * Test, ob alle Nachrichten eines Clients angekommen sind
 	 *
 	 * @param i
-	 *          : Client-Nummer
+	 *            : Client-Nummer
 	 * @return true Alle angekommen; false Nicht alle angekommen
 	 */
 	public synchronized boolean allMessageReceived(int i) {
@@ -535,7 +532,7 @@ public class SharedClientStatistics {
 	 * Anzahl der gesendeten Requests eines Clients liefern
 	 *
 	 * @param i
-	 *          Client-Id
+	 *            Client-Id
 	 * @return Anzahl gesendeter Requests des Clients i
 	 */
 	public synchronized int getNumberOfSentRequests(int i) {
@@ -563,7 +560,7 @@ public class SharedClientStatistics {
 	 * Anzahl der empfangenen Responses eines Clients liefern
 	 *
 	 * @param i
-	 *          Client-Id
+	 *            Client-Id
 	 * @return Anzahl empfangenerResponses des Clients i
 	 */
 	public synchronized int getNumberOfReceivedResponses(int i) {
@@ -591,7 +588,7 @@ public class SharedClientStatistics {
 	 * Anzahl der verlorenen Responses eines Clients liefern
 	 *
 	 * @param i
-	 *          Client-Id
+	 *            Client-Id
 	 * @return Anzahl verlorenen Responses des Clients i
 	 */
 	public synchronized int getNumberOfLostResponses(int i) {
@@ -604,7 +601,7 @@ public class SharedClientStatistics {
 	 * Anzahl der Uebertragungswuederholungen eines Clients liefern
 	 *
 	 * @param i
-	 *          Client-Id
+	 *            Client-Id
 	 * @return Anzahl Uebertragungswiederholungen des Clients i
 	 */
 	public synchronized int getNumberOfRetries(int i) {
@@ -686,8 +683,8 @@ public class SharedClientStatistics {
 			distributionMetrics.setPercentile75(percentile.evaluate(75) / 1000000.0);
 			distributionMetrics.setPercentile90(percentile.evaluate(90) / 1000000.0);
 
-			distributionMetrics.setInterquartilRange(
-					distributionMetrics.percentile75 - distributionMetrics.percentile25);
+			distributionMetrics
+					.setInterquartilRange(distributionMetrics.percentile75 - distributionMetrics.percentile25);
 
 			// Maximum berechnen
 			Max max = new Max();
@@ -700,8 +697,7 @@ public class SharedClientStatistics {
 			distributionMetrics.setMinimum(min.evaluate() / 1000000.0);
 
 			// Spannweite und IQR berechnen
-			distributionMetrics
-					.setRange(distributionMetrics.maximum - distributionMetrics.minimum);
+			distributionMetrics.setRange(distributionMetrics.maximum - distributionMetrics.minimum);
 
 			// Artihmetisches Mittel berechnen
 			Mean mean = new Mean();
@@ -789,35 +785,28 @@ public class SharedClientStatistics {
 	 * Ausgabe Statistikdaten fuer einen Client
 	 *
 	 * @param i
-	 *          Client-Id
+	 *            Client-Id
 	 */
 	public synchronized void printClientStatistic(int i) {
 		if (!inRange(i))
 			return;
 
-		System.out
-				.println("********************** Client-Statistik *****************************"
-						+ "\n" + "Sende-/Empfangsstatistik des Clients mit Id " + i + " ("
-						+ Thread.currentThread().getName() + ")" + "\n" + "Anzahl Requests gesendet: "
-						+ this.getNumberOfSentRequests(i) + "\n" + "Anzahl empfangener Responses: "
-						+ this.getNumberOfReceivedResponses(i) + "\n"
-						+ "Anzahl verlorener Responses: " + this.getNumberOfLostResponses(i) + "\n"
-						+ "Anzahl Uebertragungswiederholungen: " + this.getNumberOfRetries(i) + "\n"
-						+ "Anzahl aller gesendeten Events: " + this.getNumberOfSentEventMessages(i)
-						+ "\n" + "Anzahl aller gesendeten Events-Confirms: "
-						+ this.getNumberOfReceivedConfirmEvents(i) + "\n"
-						+ "Anzahl aller nicht empfangenen Event-Confirms: "
-						+ this.getNumberOfLostConfirmEvents(i) + "\n"
-						+ "Anzahl aller Event-Wiederholungen: " + this.getNumberOfRetriedEvents(i)
-						+ "\n" + "Durchschnittliche RTT: " + this.getAverageRTT(i) + " ns = "
-						+ this.getAverageRTT(i) / 1000000 + " ms" + "\n" + "Gesamte RTT: "
-						+ this.getSumRTT(i) + " ns = " + this.getSumRTT(i) / 1000000 + " ms" + "\n"
-						+ "Gesamte Serverzeit: " + this.getSumServerTime(i) + " ns = "
-						+ this.getSumServerTime(i) / 1000000 + " ms" + "\n"
-						+ "Gesamte Kommunikationszeit: "
-						+ (this.getSumRTT(i) - this.getSumServerTime(i)) + " ns = "
-						+ (this.getSumRTT(i) - this.getSumServerTime(i) / 1000000) + " ms" + "\n"
-						+ "********************** Ende Client-Statistik ************************");
+		System.out.println("********************** Client-Statistik *****************************" + "\n"
+				+ "Sende-/Empfangsstatistik des Clients mit Id " + i + " (" + Thread.currentThread().getName() + ")"
+				+ "\n" + "Anzahl Requests gesendet: " + this.getNumberOfSentRequests(i) + "\n"
+				+ "Anzahl empfangener Responses: " + this.getNumberOfReceivedResponses(i) + "\n"
+				+ "Anzahl verlorener Responses: " + this.getNumberOfLostResponses(i) + "\n"
+				+ "Anzahl Uebertragungswiederholungen: " + this.getNumberOfRetries(i) + "\n"
+				+ "Anzahl aller gesendeten Events: " + this.getNumberOfSentEventMessages(i) + "\n"
+				+ "Anzahl aller gesendeten Events-Confirms: " + this.getNumberOfReceivedConfirmEvents(i) + "\n"
+				+ "Anzahl aller nicht empfangenen Event-Confirms: " + this.getNumberOfLostConfirmEvents(i) + "\n"
+				+ "Anzahl aller Event-Wiederholungen: " + this.getNumberOfRetriedEvents(i) + "\n"
+				+ "Durchschnittliche RTT: " + this.getAverageRTT(i) + " ns = " + this.getAverageRTT(i) / 1000000 + " ms"
+				+ "\n" + "Gesamte RTT: " + this.getSumRTT(i) + " ns = " + this.getSumRTT(i) / 1000000 + " ms" + "\n"
+				+ "Gesamte Serverzeit: " + this.getSumServerTime(i) + " ns = " + this.getSumServerTime(i) / 1000000
+				+ " ms" + "\n" + "Gesamte Kommunikationszeit: " + (this.getSumRTT(i) - this.getSumServerTime(i))
+				+ " ns = " + (this.getSumRTT(i) - this.getSumServerTime(i) / 1000000) + " ms" + "\n"
+				+ "********************** Ende Client-Statistik ************************");
 	}
 
 	/**
@@ -829,49 +818,37 @@ public class SharedClientStatistics {
 		// n.setMaximumFractionDigits(2);
 		String usedMemoryAsString = n.format(usedMemory() / (1024 * 1024));
 
-		System.out.println(
-				"*********************************************************************" + "\n"
-						+ "***************************** Statistik *****************************"
-						+ "\n" + "Geplante Requests: " + numberOfAllMessages + "\n"
-						+ "Anzahl Clients: " + numberOfClients + "\n"
-						+ "Denkzeit des Clients zwischen zwei Requests: " + clientThinkTime + " ms"
-						+ "\n" + "Anzahl gesendeter Requests: " + this.getNumberOfSentRequests()
-						+ "\n" + "Anzahl empfangener Responses: " + this.getSumOfAllReceivedMessages()
-						+ " von erwarteten " + numberOfAllMessages + "\n"
-						+ "Anzahl Uebertragungswiederholungen: " + this.getSumOfAllRetries() + "\n"
-						+ "Anzahl geplanter Events (nur fuer Chat-Nachrichten): "
-						+ numberOfPlannedEventMessages + "\n" + "Anzahl aller gesendeten Events: "
-						+ this.getSumOfAllSentEventMessages() + "\n"
-						+ "Anzahl aller gesendeten Events-Confirms: "
-						+ this.getSumOfAllReceivedConfirmEvents() + "\n"
-						+ "Anzahl aller nicht empfangenen Event-Confirms: "
-						+ this.getSumOfAllLostConfirmEvents() + "\n"
-						+ "Anzahl aller Event-Wiederholungen: " + this.getSumOfAllRetriedEvents()
-						+ "\n" + "\n" + "Gesamte RTT ueber alle Clients: " + this.getSumRTT()
-						+ " ns (" + (this.getSumRTT() / 1000000.0) + " ms)" + "\n"
-						+ "Gesamte Serverzeit ueber alle Clients: " + this.getSumServerTime()
-						+ " ns  (" + (this.getSumServerTime() / 1000000.0) + " ms)" + "\n"
-						+ "Reine Kommunikationszeit ueber alle Clients: "
-						+ (this.getSumRTT() - this.getSumServerTime()) + " ns ("
-						+ ((this.getSumRTT() - this.getSumServerTime()) / 1000000.0) + " ms)" + "\n\n"
-						+ "Durchschnittswerte ueber alle Clients:" + "\n" + "RTT: "
-						+ this.getAverageRTT() + " ns (" + this.getAverageRTT() / 1000000.0 + " ms)"
-						+ "\n" + "Minimum RTT: " + this.getMinimumRTT() + " ns ("
-						+ this.getMinimumRTT() / 1000000 + " ms)" + "\n" + "Maximum RTT: "
-						+ this.getMaximumRTT() + " ns (" + this.getMaximumRTT() / 1000000.0 + " ms)"
-						+ "\n" + "Reine Serverzeit: " + this.getAverageServerTime() + " ns ("
-						+ (this.getAverageServerTime() / numberOfClients) / 1000000.0 + " ms)" + "\n"
-						+ "Maximal erreichte Heap-Belegung: " + usedMemoryAsString + " MByte"
+		System.out.println("*********************************************************************" + "\n"
+				+ "***************************** Statistik *****************************" + "\n" + "Geplante Requests: "
+				+ numberOfAllMessages + "\n" + "Anzahl Clients: " + numberOfClients + "\n"
+				+ "Denkzeit des Clients zwischen zwei Requests: " + clientThinkTime + " ms" + "\n"
+				+ "Anzahl gesendeter Requests: " + this.getNumberOfSentRequests() + "\n"
+				+ "Anzahl empfangener Responses: " + this.getSumOfAllReceivedMessages() + " von erwarteten "
+				+ numberOfAllMessages + "\n" + "Anzahl Uebertragungswiederholungen: " + this.getSumOfAllRetries() + "\n"
+				+ "Anzahl geplanter Events (nur fuer Chat-Nachrichten): " + numberOfPlannedEventMessages + "\n"
+				+ "Anzahl aller gesendeten Events: " + this.getSumOfAllSentEventMessages() + "\n"
+				+ "Anzahl aller gesendeten Events-Confirms: " + this.getSumOfAllReceivedConfirmEvents() + "\n"
+				+ "Anzahl aller nicht empfangenen Event-Confirms: " + this.getSumOfAllLostConfirmEvents() + "\n"
+				+ "Anzahl aller Event-Wiederholungen: " + this.getSumOfAllRetriedEvents() + "\n" + "\n"
+				+ "Gesamte RTT ueber alle Clients: " + this.getSumRTT() + " ns (" + (this.getSumRTT() / 1000000.0)
+				+ " ms)" + "\n" + "Gesamte Serverzeit ueber alle Clients: " + this.getSumServerTime() + " ns  ("
+				+ (this.getSumServerTime() / 1000000.0) + " ms)" + "\n"
+				+ "Reine Kommunikationszeit ueber alle Clients: " + (this.getSumRTT() - this.getSumServerTime())
+				+ " ns (" + ((this.getSumRTT() - this.getSumServerTime()) / 1000000.0) + " ms)" + "\n\n"
+				+ "Durchschnittswerte ueber alle Clients:" + "\n" + "RTT: " + this.getAverageRTT() + " ns ("
+				+ this.getAverageRTT() / 1000000.0 + " ms)" + "\n" + "Minimum RTT: " + this.getMinimumRTT() + " ns ("
+				+ this.getMinimumRTT() / 1000000 + " ms)" + "\n" + "Maximum RTT: " + this.getMaximumRTT() + " ns ("
+				+ this.getMaximumRTT() / 1000000.0 + " ms)" + "\n" + "Reine Serverzeit: " + this.getAverageServerTime()
+				+ " ns (" + (this.getAverageServerTime() / numberOfClients) / 1000000.0 + " ms)" + "\n"
+				+ "Maximal erreichte Heap-Belegung: " + usedMemoryAsString + " MByte"
 
-						+ "\n"
-						+ "************************ Ende Statistik *****************************"
-						+ "\n"
-						+ "*********************************************************************");
+				+ "\n" + "************************ Ende Statistik *****************************" + "\n"
+				+ "*********************************************************************");
 	}
 
 	/**
-	 * Ausgabe eines Auswertungssatzes fuer eine Messung (einen Benchmark-Lauf) in
-	 * eine Datei im CSV-Dateiformat in folgender Form:
+	 * Ausgabe eines Auswertungssatzes fuer eine Messung (einen Benchmark-Lauf)
+	 * in eine Datei im CSV-Dateiformat in folgender Form:
 	 * <p/>
 	 * 
 	 * 01 Messungstyp als String
@@ -918,7 +895,8 @@ public class SharedClientStatistics {
 	 * <p/>
 	 * 22 Anzahl aller vom Server gesendete Events-Nachrichten
 	 * <p/>
-	 * 23 Anzahl aller vom Server empfangenen Event-Bestaetigungen (Confirm-Event)
+	 * 23 Anzahl aller vom Server empfangenen Event-Bestaetigungen
+	 * (Confirm-Event)
 	 * <p/>
 	 * 24 Anzahl aller vom Server nicht erhaltenen Event-Bestaetigungen
 	 * <p/>
@@ -938,19 +916,19 @@ public class SharedClientStatistics {
 	 * Die Datei kann zur Testauswertung in Excel weiterverarbeitet werden.
 	 *
 	 * @param fileName
-	 *          Name der Datei
+	 *            Name der Datei
 	 * @param implType
-	 *          Typ der Implementierung
+	 *            Typ der Implementierung
 	 * @param measureType
-	 *          Typ der Messung
+	 *            Typ der Messung
 	 * @param startTime
-	 *          der Messung
+	 *            der Messung
 	 * @param endTime
-	 *          der Messung
+	 *            der Messung
 	 */
 
-	public synchronized void writeStatisticSet(String fileName, String implType,
-			String measureType, String startTime, String endTime, float averageCpuTime) {
+	public synchronized void writeStatisticSet(String fileName, String implType, String measureType, String startTime,
+			String endTime, float averageCpuTime) {
 
 		File file = new File(fileName);
 
@@ -977,18 +955,15 @@ public class SharedClientStatistics {
 					"%s | %s | %d | %d | "
 							+ "%05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f |  %05.2f |  %05.2f | "
 							+ "%d | %d | %d | %d | %d | %d | %d | %d | %d | %d | %02.2f | %s | %s%n",
-					measureType, implType, numberOfClients, numberOfMessages,
-					distr.getPercentile10(), distr.getPercentile25(), distr.getPercentile50(),
-					distr.getPercentile75(), distr.getPercentile90(), distr.getRange(),
-					distr.getInterquartilRange(), distr.getMinimum(), distr.getMaximum(),
-					distr.getMean(), distr.getStandardDeviation(),
-					this.getAverageServerTime() / 1000000.0, this.numberOfAllMessages,
-					this.getNumberOfSentRequests(), this.getNumberOfReceivedResponses(),
-					this.getNumberOfLostResponses(), this.getSumOfAllRetries(),
-					this.getSumOfAllSentEventMessages(), this.getSumOfAllReceivedConfirmEvents(),
-					this.getSumOfAllLostConfirmEvents(), this.getSumOfAllRetriedEvents(),
-					this.getMaxHeapSize() / (1024 * 1024), (double) (averageCpuTime * 100),
-					startTime, endTime));
+					measureType, implType, numberOfClients, numberOfMessages, distr.getPercentile10(),
+					distr.getPercentile25(), distr.getPercentile50(), distr.getPercentile75(), distr.getPercentile90(),
+					distr.getRange(), distr.getInterquartilRange(), distr.getMinimum(), distr.getMaximum(),
+					distr.getMean(), distr.getStandardDeviation(), this.getAverageServerTime() / 1000000.0,
+					this.numberOfAllMessages, this.getNumberOfSentRequests(), this.getNumberOfReceivedResponses(),
+					this.getNumberOfLostResponses(), this.getSumOfAllRetries(), this.getSumOfAllSentEventMessages(),
+					this.getSumOfAllReceivedConfirmEvents(), this.getSumOfAllLostConfirmEvents(),
+					this.getSumOfAllRetriedEvents(), this.getMaxHeapSize() / (1024 * 1024),
+					(double) (averageCpuTime * 100), startTime, endTime));
 
 			out.append(sb);
 			formatter.close();

@@ -9,128 +9,127 @@ import java.util.Vector;
  */
 public interface ClientUserInterface {
 
-	/**
-	 * Uebergabe der Startdaten an die GUI
-	 *
-	 * @param userList
-	 *          Liste der aktuell angemeldeten User
-	 */
-	public void setUserList(Vector<String> userList);
+  /**
+   * Uebergabe der Startdaten an die GUI
+   *
+   * @param userList
+   *          Liste der aktuell angemeldeten User
+   */
+  public void setUserList(Vector<String> userList);
 
-	/**
-	 * Uebergabe einer Nachricht zur Ausgabe in der Messagezeile
-	 *
-	 * @param sender
-	 *          Absender der Nachricht
-	 * @param message
-	 *          Nachrichtentext
-	 */
-	public void setMessageLine(String sender, String message);
+  /**
+   * Uebergabe einer Nachricht zur Ausgabe in der Messagezeile
+   *
+   * @param sender
+   *          Absender der Nachricht
+   * @param message
+   *          Nachrichtentext
+   */
+  public void setMessageLine(String sender, String message);
 
-	/*
-	 * Änderung der Gui-Messagezeile, wenn ein Event von allen Clients besätigt wurde
-	 * 
-	 */
-	public void changeLastMessageLineToConfirmed(); 
-	
-	/**
-	 * Sperren bzw. Entsperren der Eingabe von Chat-Nachrichten an der GUI
-	 *
-	 * @param lock
-	 *          true, wenn Client warten muss, sonst false
-	 */
-	public void setLock(boolean lock);
+  /*
+   * Änderung der Gui-Messagezeile, wenn ein Event von allen Clients besätigt wurde
+   * 
+   */
+  public void changeLastMessageLineToConfirmed();
 
-	/**
-	 * Lesen der Sperre
-	 * 
-	 * @param lock
-	 *          true, wenn Client warten muss, sonst false
-	 */
-	public boolean getLock();
+  /**
+   * Sperren bzw. Entsperren der Eingabe von Chat-Nachrichten an der GUI
+   *
+   * @param lock
+   *          true, wenn Client warten muss, sonst false
+   */
+  public void setLock(boolean lock);
 
-	/**
-	 * Abfragen, ob Benutzer den Chat stoppen will
-	 */
-	public boolean isTestAborted();
+  /**
+   * Lesen der Sperre
+   * 
+   * @param lock
+   *          true, wenn Client warten muss, sonst false
+   */
+  public boolean getLock();
 
-	/**
-	 * Stoppen des laufenden Chats
-	 */
-	public void abortTest();
+  /**
+   * Abfragen, ob Benutzer den Chat stoppen will
+   */
+  public boolean isTestAborted();
 
-	/**
-	 * (Rueck)setzen des Stop-Flags
-	 */
-	public void releaseTest();
+  /**
+   * Stoppen des laufenden Chats
+   */
+  public void abortTest();
 
-	/**
-	 * Puefen, ob Test gerade laeuft
-	 */
-	public boolean isRunning();
+  /**
+   * (Rueck)setzen des Stop-Flags
+   */
+  public void releaseTest();
 
-	/**
-	 * Serverbearbeitungszeit des letzten Chat-Message-Requests merken
-	 * 
-	 * @param lastServerTime
-	 *          Zuletzt gemessene Serverbearbeitungszeit
-	 */
-	public void setLastServerTime(long lastServerTime);
+  /**
+   * Puefen, ob Test gerade laeuft
+   */
+  public boolean isRunning();
 
-	/**
-	 * Auslesen der zuletzt benoetigten Zeit fuer die Bearbeitung eines
-	 * Chat-Message-Requests im Server
-	 * 
-	 * @return
-	 */
-	public long getLastServerTime();
+  /**
+   * Serverbearbeitungszeit des letzten Chat-Message-Requests merken
+   * 
+   * @param lastServerTime
+   *          Zuletzt gemessene Serverbearbeitungszeit
+   */
+  public void setLastServerTime(long lastServerTime);
 
-	/**
-	 * Zaehler einer Chat-Session setzen (Zaehlung erfolgt im Server)
-	 * 
-	 * @param numberOfSentEvents
-	 *          Waehrend der Session gesendete Events
-	 * @param numberOfReceivedConfirms
-	 *          Waehrend der Session gesendete/empfangene Confirms
-	 * @param numberOfLostConfirms
-	 *          Waehrend der Session verlorene Confirms
-	 * @param numberOfRetries
-	 *          Waehrend der Session gesendete Wiederholungen
-	 */
-	public void setSessionStatisticsCounter(long numberOfSentEvents,
-			long numberOfReceivedConfirms, long numberOfLostConfirms, long numberOfRetries,
-			long numberOfReceivedChatMessages);
+  /**
+   * Auslesen der zuletzt benoetigten Zeit fuer die Bearbeitung eines Chat-Message-Requests im
+   * Server
+   * 
+   * @return
+   */
+  public long getLastServerTime();
 
-	public long getNumberOfSentEvents();
+  /**
+   * Zaehler einer Chat-Session setzen (Zaehlung erfolgt im Server)
+   * 
+   * @param numberOfSentEvents
+   *          Waehrend der Session gesendete Events
+   * @param numberOfReceivedConfirms
+   *          Waehrend der Session gesendete/empfangene Confirms
+   * @param numberOfLostConfirms
+   *          Waehrend der Session verlorene Confirms
+   * @param numberOfRetries
+   *          Waehrend der Session gesendete Wiederholungen
+   */
+  public void setSessionStatisticsCounter(long numberOfSentEvents, long numberOfReceivedConfirms,
+      long numberOfLostConfirms, long numberOfRetries, long numberOfReceivedChatMessages);
 
-	public long getNumberOfReceivedConfirms();
+  public long getNumberOfSentEvents();
 
-	public long getNumberOfLostConfirms();
+  public long getNumberOfReceivedConfirms();
 
-	public long getNumberOfRetries();
+  public long getNumberOfLostConfirms();
 
-	public long getNumberOfReceivedChatMessages();
+  public long getNumberOfRetries();
 
-	/**
-	 * Uebergabe einer Fehlermeldung
-	 *
-	 * @param sender
-	 *          Absender der Fehlermeldung
-	 * @param errorMessage
-	 *          Fehlernachricht
-	 * @param errorCode
-	 *          Error Code
-	 */
+  public long getNumberOfReceivedChatMessages();
 
-	public void setErrorMessage(String sender, String errorMessage, long errorCode);
+  /**
+   * Uebergabe einer Fehlermeldung
+   *
+   * @param sender
+   *          Absender der Fehlermeldung
+   * @param errorMessage
+   *          Fehlernachricht
+   * @param errorCode
+   *          Error Code
+   */
 
-	/**
-	 * Login vollstaendig und Chat-GUI kann angezeigt werden
-	 */
-	public void loginComplete();
+  public void setErrorMessage(String sender, String errorMessage, long errorCode);
 
-	/**
-	 * Logout vollstaendig durchgefuehrt
-	 */
-	public void logoutComplete();
+  /**
+   * Login vollstaendig und Chat-GUI kann angezeigt werden
+   */
+  public void loginComplete();
+
+  /**
+   * Logout vollstaendig durchgefuehrt
+   */
+  public void logoutComplete();
 }

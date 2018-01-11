@@ -15,23 +15,23 @@ import javafx.collections.ObservableList;
  */
 public class ClientModel {
 
-	private StringProperty userName = new SimpleStringProperty();
+  private StringProperty userName = new SimpleStringProperty();
 
-	public StringProperty userNameProperty() {
-		return userName;
-	}
+  public StringProperty userNameProperty() {
+    return userName;
+  }
 
-	public void setUserName(String name) {
-		userName.set(name);
-	}
+  public void setUserName(String name) {
+    userName.set(name);
+  }
 
-	public String getUserName() {
-		return userName.get();
-	}
+  public String getUserName() {
+    return userName.get();
+  }
 
-	public ObservableList<String> users = FXCollections.observableArrayList();
-	//auf static geändert
-	public  ObservableList<String> chats = FXCollections.observableArrayList(); 
+  public ObservableList<String> users = FXCollections.observableArrayList();
+  // auf static geändert
+  public ObservableList<String> chats = FXCollections.observableArrayList();
 
-	public BooleanProperty block = new SimpleBooleanProperty();
+  public BooleanProperty block = new SimpleBooleanProperty();
 }

@@ -6,19 +6,17 @@ package edu.hm.dako.chat.connection;
  */
 public class DecoratingConnectionFactory implements ConnectionFactory {
 
-  private final ConnectionFactory wrappedFactory;
+	private final ConnectionFactory wrappedFactory;
 
-  public DecoratingConnectionFactory(ConnectionFactory wrappedFactory) {
-    this.wrappedFactory = wrappedFactory;
-  }
+	public DecoratingConnectionFactory(ConnectionFactory wrappedFactory) {
+		this.wrappedFactory = wrappedFactory;
+	}
 
-  @Override
-  public Connection connectToServer(String remoteServerAddress,
-	int serverPort, int localPort, int sendBufferSize,
-	int receiveBufferSize) throws Exception {
-    Connection wrappedConnection = wrappedFactory.connectToServer(
-	  remoteServerAddress, serverPort, localPort, sendBufferSize,
-	  receiveBufferSize);
-    return new LoggingConnectionDecorator(wrappedConnection);
-  }
+	@Override
+	public Connection connectToServer(String remoteServerAddress, int serverPort, int localPort, int sendBufferSize,
+			int receiveBufferSize) throws Exception {
+		Connection wrappedConnection = wrappedFactory.connectToServer(remoteServerAddress, serverPort, localPort,
+				sendBufferSize, receiveBufferSize);
+		return new LoggingConnectionDecorator(wrappedConnection);
+	}
 }

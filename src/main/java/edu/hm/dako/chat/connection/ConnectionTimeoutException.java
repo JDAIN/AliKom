@@ -7,9 +7,9 @@ package edu.hm.dako.chat.connection;
  */
 public class ConnectionTimeoutException extends Exception {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  public ConnectionTimeoutException(Exception e) {
-    super("Timeout bei Verbindung aufgetreten");
-  }
+	public ConnectionTimeoutException(Exception e) {
+		super("Timeout bei Verbindung aufgetreten");
+	}
 }

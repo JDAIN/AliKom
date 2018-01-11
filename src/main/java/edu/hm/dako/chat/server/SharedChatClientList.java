@@ -468,7 +468,7 @@ public class SharedChatClientList {
 
 	public synchronized int deleteWaitListEntry(String userName, String entryName) throws Exception {
 		// verändert, war falsch (entry und username getauscht)
-		log.debug("Client: " + userName + ", aus Warteliste von " +  entryName + " loeschen ");
+		log.debug("Client: " + userName + ", aus Warteliste von " + entryName + " loeschen ");
 
 		ClientListEntry client = clients.get(userName);
 

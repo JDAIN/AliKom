@@ -3,8 +3,8 @@ package edu.hm.dako.chat.common;
 import java.text.NumberFormat;
 
 /**
- * Testklasse fuer einen Heap-Test. Klasse dient nur zum Test und ist nicht fuer die
- * Studienarbeit relevant
+ * Testklasse fuer einen Heap-Test. Klasse dient nur zum Test und ist nicht fuer die Studienarbeit
+ * relevant
  *
  * @author mandl
  */
@@ -15,62 +15,55 @@ public class MemoryTest {
   public static void main(String[] args) {
 
     try {
-	r = Runtime.getRuntime();
+      r = Runtime.getRuntime();
 
-	n = NumberFormat.getInstance();
-	n.setMaximumFractionDigits(2);
+      n = NumberFormat.getInstance();
+      n.setMaximumFractionDigits(2);
 
-	getMemoryOverview("Start");
+      getMemoryOverview("Start");
 
-	int anzahlArrays = 100000;
-	int laengeArray = 100;
+      int anzahlArrays = 100000;
+      int laengeArray = 100;
 
-	Object[] array = new Object[anzahlArrays];
+      Object[] array = new Object[anzahlArrays];
 
-	for (int i = 0; i < anzahlArrays; i++) {
+      for (int i = 0; i < anzahlArrays; i++) {
 
-	  array[i] = new String[laengeArray][laengeArray];
-	  // Ausgabe nur jedes 1000te Array
-	  if (i % 1000 == 0) {
-	    System.out.print(i + ": ");
-	    printFreeMemory();
-	  }
-	}
+        array[i] = new String[laengeArray][laengeArray];
+        // Ausgabe nur jedes 1000te Array
+        if (i % 1000 == 0) {
+          System.out.print(i + ": ");
+          printFreeMemory();
+        }
+      }
 
-	getMemoryOverview("Ende");
+      getMemoryOverview("Ende");
 
     } catch (OutOfMemoryError e) {
-	System.out.println("OutOfMemory");
-	getMemoryOverview("Exception");
+      System.out.println("OutOfMemory");
+      getMemoryOverview("Exception");
 
-	System.out.println(e);
+      System.out.println(e);
     } catch (Exception e) {
 
-	e.printStackTrace();
+      e.printStackTrace();
     }
   }
 
   private static void getMemoryOverview(String place) {
     System.out.println("-----Speicheruebersicht(" + place + ")------");
-    System.out.println("Gesamt-Speicher: "
-	  + n.format(inMBytes(r.totalMemory())) + " MB");
-    System.out.println("freier Speicher: "
-	  + n.format(inMBytes(r.freeMemory())) + " MB");
-    System.out.println("maximaler Speicher: "
-	  + n.format(inMBytes(r.maxMemory())) + " MB");
+    System.out.println("Gesamt-Speicher: " + n.format(inMBytes(r.totalMemory())) + " MB");
+    System.out.println("freier Speicher: " + n.format(inMBytes(r.freeMemory())) + " MB");
+    System.out.println("maximaler Speicher: " + n.format(inMBytes(r.maxMemory())) + " MB");
 
-    System.out
-	  .println("Verfuegbare Prozessoren: " + r.availableProcessors());
+    System.out.println("Verfuegbare Prozessoren: " + r.availableProcessors());
   }
 
   public static void printFreeMemory() {
 
-    System.out.println("Maximaler moeglicher Heap-Speicher: "
-	  + n.format(inMBytes(r.maxMemory())) + " MB, "
-	  + "benutzter Heap-Speicher: "
-	  + n.format(inMBytes(usedMemory(r))) + " MB, "
-	  + "noch verfuegbar insgesamt: "
-	  + n.format(inMBytes(availableMemory(r))) + " MB");
+    System.out.println("Maximaler moeglicher Heap-Speicher: " + n.format(inMBytes(r.maxMemory()))
+        + " MB, " + "benutzter Heap-Speicher: " + n.format(inMBytes(usedMemory(r))) + " MB, "
+        + "noch verfuegbar insgesamt: " + n.format(inMBytes(availableMemory(r))) + " MB");
   }
 
   /**
@@ -88,8 +81,7 @@ public class MemoryTest {
    */
   public static long availableMemory(Runtime r) {
 
-    long availableMemory = r.maxMemory()
-	  - (r.totalMemory() - r.freeMemory());
+    long availableMemory = r.maxMemory() - (r.totalMemory() - r.freeMemory());
 
     return (availableMemory);
   }

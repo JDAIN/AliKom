@@ -19,18 +19,15 @@ public class TestNanoTime {
 			} catch (Exception e) {
 			}
 
-			System.out.println(
-					"Start time in ns: " + startTime + " = " + startTime / 1000000 + " ms");
+			System.out.println("Start time in ns: " + startTime + " = " + startTime / 1000000 + " ms");
 
 			// Ende der Zeitmessung
 			long endTime = System.nanoTime();
 
-			System.out
-					.println("End time in ns: " + endTime + " = " + endTime / 1000000 + " ms");
+			System.out.println("End time in ns: " + endTime + " = " + endTime / 1000000 + " ms");
 			long elapseTime = endTime - startTime;
 
-			System.out.println(
-					"Elapsed time in ns: " + elapseTime + " = " + elapseTime / 1000000 + " ms");
+			System.out.println("Elapsed time in ns: " + elapseTime + " = " + elapseTime / 1000000 + " ms");
 			System.out.println("");
 		}
 	}

@@ -7,11 +7,11 @@ package edu.hm.dako.chat.server;
  */
 public interface ChatServerGuiInterface {
 
-	public void showStartData(ServerStartData data);
+  public void showStartData(ServerStartData data);
 
-	public void incrNumberOfLoggedInClients();
+  public void incrNumberOfLoggedInClients();
 
-	public void decrNumberOfLoggedInClients();
+  public void decrNumberOfLoggedInClients();
 
-	public void incrNumberOfRequests();
+  public void incrNumberOfRequests();
 }

@@ -7,15 +7,15 @@ package edu.hm.dako.chat.server;
  */
 public interface ChatServerInterface {
 
-	/**
-	 * Startet den Server
-	 */
-	void start();
+  /**
+   * Startet den Server
+   */
+  void start();
 
-	/**
-	 * Stoppt den Server
-	 *
-	 * @throws Exception
-	 */
-	void stop() throws Exception;
+  /**
+   * Stoppt den Server
+   *
+   * @throws Exception
+   */
+  void stop() throws Exception;
 }

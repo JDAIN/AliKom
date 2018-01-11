@@ -1,12 +1,11 @@
 package edu.hm.dako.chat.common;
 
 /**
- * Implementierungsvarianten des Lasttests mit verschiedenen
- * Transportprotokollen
+ * Implementierungsvarianten des Lasttests mit verschiedenen Transportprotokollen
  *
  * @author Mandl
  */
 
 public enum ImplementationType {
-	TCPSimpleImplementation, TCPAdvancedImplementation
+  TCPSimpleImplementation, TCPAdvancedImplementation
 }

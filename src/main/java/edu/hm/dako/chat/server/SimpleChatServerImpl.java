@@ -24,7 +24,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 	private static Log log = LogFactory.getLog(SimpleChatServerImpl.class);
 
 	// Threadpool fuer Worker-Threads
-	private final ExecutorService executorService; //was ist das
+	private final ExecutorService executorService; // was ist das
 
 	// Socket fuer den Listener, der alle Verbindungsaufbauwuensche der Clients
 	// entgegennimmt
@@ -37,8 +37,8 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 	 * @param socket
 	 * @param serverGuiInterface
 	 */
-	public SimpleChatServerImpl(ExecutorService executorService,
-			ServerSocketInterface socket, ChatServerGuiInterface serverGuiInterface) {
+	public SimpleChatServerImpl(ExecutorService executorService, ServerSocketInterface socket,
+			ChatServerGuiInterface serverGuiInterface) {
 		log.debug("SimpleChatServerImpl konstruiert");
 		this.executorService = executorService;
 		this.socket = socket;
@@ -60,21 +60,19 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 				while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
 					try {
 						// Auf ankommende Verbindungsaufbauwuensche warten
-						System.out.println(
-								"SimpleChatServer wartet auf Verbindungsanfragen von Clients...");
+						System.out.println("SimpleChatServer wartet auf Verbindungsanfragen von Clients...");
 
 						Connection connection = socket.accept();
 						log.debug("Neuer Verbindungsaufbauwunsch empfangen");
 
 						// Neuen Workerthread starten
-						executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
-								counter, serverGuiInterface));
+						executorService.submit(
+								new SimpleChatWorkerThreadImpl(connection, clients, counter, serverGuiInterface));
 					} catch (Exception e) {
 						if (socket.isClosed()) {
 							log.debug("Socket wurde geschlossen");
 						} else {
-							log.error(
-									"Exception beim Entgegennehmen von Verbindungsaufbauwuenschen: " + e);
+							log.error("Exception beim Entgegennehmen von Verbindungsaufbauwuenschen: " + e);
 							ExceptionHandler.logException(e);
 						}
 					}
@@ -101,8 +99,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 					log.error("Verbindung zu Client " + client.getUserName() + " geschlossen");
 				}
 			} catch (Exception e) {
-				log.debug(
-						"Fehler beim Schliessen der Verbindung zu Client " + client.getUserName());
+				log.debug("Fehler beim Schliessen der Verbindung zu Client " + client.getUserName());
 				ExceptionHandler.logException(e);
 			}
 		}
