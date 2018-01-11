@@ -487,16 +487,17 @@ log.debug("sendlogoutresponsepdu: " + receivedPdu.toString());
 		// wenn warteliste leer ist LoginResponse an Event initiator senden
 		if (clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
 			// Login Response senden
-			ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(receivedPdu.getEventUserName(), receivedPdu);
+			ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu); //das geändert 
 
 			try {
 				clients.getClient(userName).getConnection().send(responsePdu);
+				log.debug("Login-Response-PDU an Client " + userName + " gesendet");
 			} catch (Exception e) {
 				log.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
 				log.debug("Exception Message: " + e.getMessage());
 			}
 
-			log.debug("Login-Response-PDU an Client " + userName + " gesendet");
+			
 
 			// Zustand des Clients aendern
 			clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
