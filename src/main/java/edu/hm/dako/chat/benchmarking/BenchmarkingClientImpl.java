@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import edu.hm.dako.chat.client.AbstractChatClient;
+import edu.hm.dako.chat.client.AdvancedMessageListenerThreadImpl;
 import edu.hm.dako.chat.client.ClientImpl;
 import edu.hm.dako.chat.client.ClientUserInterface;
 import edu.hm.dako.chat.client.SimpleMessageListenerThreadImpl;
@@ -132,6 +133,16 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 				ExceptionHandler.logException(e);
 			}
 			break;
+			
+		case TCPAdvancedImplementation:
+			try {
+				messageListenerThread = new AdvancedMessageListenerThreadImpl(this, connection,
+						sharedClientData);
+				messageListenerThread.start();
+			} catch (Exception e) {
+				ExceptionHandler.logException(e);
+			}
+		
 
 		default:
 			break;

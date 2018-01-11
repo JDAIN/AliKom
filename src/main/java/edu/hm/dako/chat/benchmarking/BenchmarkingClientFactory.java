@@ -35,7 +35,17 @@ public final class BenchmarkingClientFactory {
 						param.getNumberOfRetries(), param.getResponseTimeout(), sharedData,
 						getDecoratedFactory(new TcpConnectionFactory()));
 				return impl;
+				
+			case TCPAdvancedImplementation:
 
+				BenchmarkingClientImpl impl2 = new BenchmarkingClientImpl(userInterface,
+						benchmarkingGui, param.getImplementationType(), param.getRemoteServerPort(),
+						param.getRemoteServerAddress(), numberOfClient, param.getMessageLength(),
+						param.getNumberOfMessages(), param.getClientThinkTime(),
+						param.getNumberOfRetries(), param.getResponseTimeout(), sharedData,
+						getDecoratedFactory(new TcpConnectionFactory()));
+				return impl2;
+				
 			default:
 				throw new RuntimeException(
 						"Unbekannter Implementierungstyp: " + param.getImplementationType());

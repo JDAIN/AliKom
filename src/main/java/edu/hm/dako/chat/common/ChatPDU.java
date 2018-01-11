@@ -501,6 +501,7 @@ public class ChatPDU implements Serializable {
 		pdu.setClientStatus(ClientConversationStatus.REGISTERED); //evt noch auf registered
 		
 		return pdu;
+		
 	}
 
 	/**

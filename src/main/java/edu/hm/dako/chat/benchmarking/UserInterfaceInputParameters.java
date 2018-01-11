@@ -31,8 +31,9 @@ public class UserInterfaceInputParameters {
 	// Typ der Messung fuer das Messprotokoll
 	private MeasurementType measurementType;
 	private int remoteServerPort; // UDP- oder TCP-Port des Servers, Default:
-																// 50000
-	private String remoteServerAddress; // Server-IP-Adresse, Default: "127.0.0.1"
+									// 50000
+	private String remoteServerAddress; // Server-IP-Adresse, Default:
+										// "127.0.0.1"
 
 	/**
 	 * Konstruktor Belegung der Inputparameter mit Standardwerten
@@ -52,16 +53,20 @@ public class UserInterfaceInputParameters {
 	 * Abbildung der Implementierungstypen auf Strings
 	 *
 	 * @param type
-	 *          Implementierungstyp
+	 *            Implementierungstyp
 	 * @return Passender String fuer Implementierungstyp
 	 */
 	public String mapImplementationTypeToString(ImplementationType type) {
 		String returnString = null;
 
 		switch (type) {
-		
+
 		case TCPSimpleImplementation:
 			returnString = "TCPSimple-Implementation";
+			break;
+
+		case TCPAdvancedImplementation:
+			returnString = "TCPAdvanced-Implementation";
 			break;
 
 		default:
@@ -72,8 +77,8 @@ public class UserInterfaceInputParameters {
 	}
 
 	/**
-	 * Typen von unterstuetzten Messungen: Nur fuer die Unterscheidung der Messung
-	 * im Benchmarking-Protokoll
+	 * Typen von unterstuetzten Messungen: Nur fuer die Unterscheidung der
+	 * Messung im Benchmarking-Protokoll
 	 *
 	 * @author Mandl
 	 */
@@ -88,7 +93,7 @@ public class UserInterfaceInputParameters {
 	 * Abbildung der Messungstypen auf Strings
 	 *
 	 * @param type
-	 *          Messungstyp
+	 *            Messungstyp
 	 * @return Passender String fuer Messungstyp
 	 */
 	public String mapMeasurementTypeToString(MeasurementType type) {
